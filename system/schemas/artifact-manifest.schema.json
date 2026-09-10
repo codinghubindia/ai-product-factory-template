@@ -1,0 +1,141 @@
+{
+  "": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Artifact Manifest",
+  "type": "object",
+  "required": [
+    "product_id",
+    "version",
+    "generated_at",
+    "artifacts"
+  ],
+  "properties": {
+    "product_id": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "generated_at": {
+      "type": "string"
+    },
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "type",
+          "modality",
+          "output_path",
+          "status",
+          "required"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "file",
+              "document",
+              "template",
+              "application",
+              "build",
+              "installer",
+              "package",
+              "api",
+              "database",
+              "url",
+              "integration",
+              "deployment_endpoint"
+            ]
+          },
+          "modality": {
+            "type": "string"
+          },
+          "platform": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "output_path": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "version": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "built",
+              "verified",
+              "failed",
+              "external_setup_required"
+            ]
+          },
+          "required": {
+            "type": "boolean"
+          },
+          "qa_status": {
+            "type": "string",
+            "enum": [
+              "untested",
+              "pass",
+              "fail",
+              "waived"
+            ]
+          },
+          "build_status": {
+            "type": "string",
+            "enum": [
+              "not_built",
+              "building",
+              "built",
+              "failed"
+            ]
+          },
+          "runtime": {
+            "type": "string"
+          },
+          "dependencies": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "external_services": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "installation_method": {
+            "type": "string"
+          },
+          "deployment_method": {
+            "type": "string"
+          },
+          "release_status": {
+            "type": "string",
+            "enum": [
+              "buildable",
+              "deployable",
+              "deployed",
+              "published"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Delivery Manifest",
+  "type": "object",
+  "required": [
+    "product_id",
+    "product_name",
+    "version",
+    "delivery_timestamp",
+    "deliverables",
+    "customer_access"
+  ],
+  "properties": {
+    "product_id": {
+      "type": "string"
+    },
+    "product_name": {
+      "type": "string"
+    },
+    "version": {
+      "type": "string"
+    },
+    "delivery_timestamp": {
+      "type": "string"
+    },
+    "deliverables": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "type",
+          "delivery_format",
+          "location_or_url"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "file",
+              "zip_archive",
+              "application",
+              "installer",
+              "app_package",
+              "url",
+              "workspace_access",
+              "api",
+              "documentation",
+              "license"
+            ]
+          },
+          "delivery_format": {
+            "type": "string"
+          },
+          "location_or_url": {
+            "type": "string"
+          },
+          "file_size_bytes": {
+            "type": "integer"
+          },
+          "checksum_sha256": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "customer_access": {
+      "type": "object",
+      "required": [
+        "access_type",
+        "instructions"
+      ],
+      "properties": {
+        "access_type": {
+          "type": "string",
+          "enum": [
+            "direct_download",
+            "portal_login",
+            "api_key",
+            "workspace_invite",
+            "marketplace_link"
+          ]
+        },
+        "instructions": {
+          "type": "string"
+        },
+        "support_channel": {
+          "type": "string"
+        }
+      }
+    },
+    "installation_guide": {
+      "type": "object",
+      "properties": {
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "troubleshooting": {
+          "type": "string"
+        }
+      }
+    },
+    "license": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "terms_summary": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

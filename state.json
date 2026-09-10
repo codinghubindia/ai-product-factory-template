@@ -1,7 +1,7 @@
 {
   "project": {
-    "id": "product-factory-001",
-    "name": "AI Product Factory",
+    "id": null,
+    "name": null,
     "version": "0.1.0"
   },
   "workflow": {
@@ -27,16 +27,28 @@
     "id": null,
     "name": null,
     "type": null,
+    "modality": null,
+    "platforms": [],
     "status": null
+  },
+  "architecture": {
+    "status": null,
+    "blueprint_path": null
+  },
+  "build": {
+    "status": null,
+    "software_build_status": null,
+    "artifact_build_status": null
   },
   "design": {
     "theme": null,
     "status": null
   },
-  "packaging": {
-    "status": null
+  "qa": {
+    "artifact_qa_status": null,
+    "software_qa_status": null
   },
-  "distribution": {
+  "packaging": {
     "status": null
   },
   "audit": {
@@ -44,5 +56,13 @@
     "last_run": null,
     "critical_issues": 0,
     "high_issues": 0
+  },
+  "release": {
+    "status": null,
+    "deployment_status": null,
+    "external_setup_required": false
+  },
+  "distribution": {
+    "status": null
   }
 }

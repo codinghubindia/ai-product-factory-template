@@ -1,12 +1,12 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "": "https://json-schema.org/draft/2020-12/schema",
   "title": "Product Specification",
   "type": "object",
   "required": [
     "product_id",
     "name",
-    "format",
-    "format_rationale",
+    "product_type",
+    "product_modality",
     "target_customer",
     "problem",
     "job_to_be_done",
@@ -14,14 +14,6 @@
     "promise",
     "unique_mechanism",
     "positioning",
-    "structure",
-    "modules",
-    "examples",
-    "templates",
-    "exercises",
-    "bonuses",
-    "design_requirements",
-    "distribution_assumptions",
     "quality_criteria"
   ],
   "properties": {
@@ -33,22 +25,114 @@
       "type": "string",
       "description": "Working product name or title"
     },
-    "format": {
+    "product_type": {
       "type": "string",
-      "enum": ["template_system", "actionable_guide", "workbook", "toolkit_bundle", "presentation_deck", "hybrid"],
-      "description": "Selected primary delivery format"
+      "description": "High-level classification (document, template, web_application, mobile_application, desktop_application, interactive_tool, api_service, database_product, automation, ai_product, hybrid)"
     },
-    "format_rationale": {
+    "product_modality": {
       "type": "string",
-      "description": "Why this format best delivers the transformation for this customer"
+      "enum": [
+        "document",
+        "template",
+        "productivity_artifact",
+        "interactive_tool",
+        "web_application",
+        "mobile_application",
+        "tablet_application",
+        "desktop_application",
+        "browser_extension",
+        "cli_developer_tool",
+        "api_service",
+        "database_product",
+        "data_product",
+        "automation_workflow",
+        "ai_product",
+        "multimedia",
+        "education",
+        "game_interactive",
+        "plugin_integration",
+        "bot",
+        "device_companion",
+        "xr_3d",
+        "hybrid"
+      ],
+      "description": "Selected primary delivery modality"
+    },
+    "modality_comparison": {
+      "type": "object",
+      "description": "Explicit comparison between simplest valid solution, best CX, and higher-complexity solution",
+      "properties": {
+        "simplest_valid_solution": {
+          "type": "string"
+        },
+        "best_cx_solution": {
+          "type": "string"
+        },
+        "higher_complexity_solution": {
+          "type": "string"
+        },
+        "selection_reason": {
+          "type": "string"
+        },
+        "complexity_rationale": {
+          "type": "string"
+        },
+        "rejected_modalities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "platforms": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "web",
+          "ios",
+          "android",
+          "macos",
+          "windows",
+          "linux",
+          "chrome",
+          "firefox",
+          "edge",
+          "terminal",
+          "agnostic"
+        ]
+      },
+      "description": "Target OS or platform environments"
+    },
+    "target_environment": {
+      "type": "string",
+      "description": "Runtime or hosting environment (local browser, Docker, cloud serverless, node, python)"
+    },
+    "delivery_channels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "How customer accesses product (direct download, web URL, marketplace, npm)"
     },
     "target_customer": {
       "type": "object",
-      "required": ["segment", "role", "sophistication_level"],
+      "required": [
+        "segment",
+        "role",
+        "sophistication_level"
+      ],
       "properties": {
-        "segment": {"type": "string"},
-        "role": {"type": "string"},
-        "sophistication_level": {"type": "string"}
+        "segment": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "sophistication_level": {
+          "type": "string"
+        }
       }
     },
     "problem": {
@@ -61,10 +145,17 @@
     },
     "transformation": {
       "type": "object",
-      "required": ["from_state", "to_state"],
+      "required": [
+        "from_state",
+        "to_state"
+      ],
       "properties": {
-        "from_state": {"type": "string"},
-        "to_state": {"type": "string"}
+        "from_state": {
+          "type": "string"
+        },
+        "to_state": {
+          "type": "string"
+        }
       }
     },
     "promise": {
@@ -73,93 +164,269 @@
     },
     "unique_mechanism": {
       "type": "string",
-      "description": "Distinctive methodology, system, or framework that powers the result"
+      "description": "Distinctive methodology, system, algorithm, or framework that powers the result"
     },
     "positioning": {
       "type": "string",
       "description": "Positioning relative to alternatives and current workarounds"
     },
-    "structure": {
+    "architecture": {
+      "type": "object",
+      "description": "Technical architecture blueprint for software, tool, API, database, or hybrid products",
+      "properties": {
+        "topology": {
+          "type": "string"
+        },
+        "frontend": {
+          "type": "string"
+        },
+        "backend": {
+          "type": "string"
+        },
+        "database": {
+          "type": "string"
+        },
+        "auth": {
+          "type": "string"
+        },
+        "storage": {
+          "type": "string"
+        }
+      }
+    },
+    "technical_dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Software frameworks, runtimes, or libraries required"
+    },
+    "external_services": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["order", "title", "type", "description"],
+        "required": [
+          "name",
+          "purpose",
+          "integration_status"
+        ],
         "properties": {
-          "order": {"type": "integer"},
-          "title": {"type": "string"},
-          "type": {"type": "string"},
-          "description": {"type": "string"}
+          "name": {
+            "type": "string"
+          },
+          "purpose": {
+            "type": "string"
+          },
+          "integration_status": {
+            "type": "string",
+            "enum": [
+              "integrated",
+              "mocked",
+              "external_setup_required"
+            ]
+          }
         }
       }
+    },
+    "data_requirements": {
+      "type": "object",
+      "description": "Persistence, caching, privacy, and data storage needs",
+      "properties": {
+        "persistence_type": {
+          "type": "string"
+        },
+        "privacy_level": {
+          "type": "string"
+        },
+        "schema_definition": {
+          "type": "string"
+        }
+      }
+    },
+    "security_requirements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Input validation, auth boundaries, secrets handling, safe fallbacks"
+    },
+    "build_requirements": {
+      "type": "object",
+      "properties": {
+        "tooling_required": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "build_command": {
+          "type": "string"
+        },
+        "output_directory": {
+          "type": "string"
+        }
+      }
+    },
+    "runtime_requirements": {
+      "type": "object",
+      "properties": {
+        "minimum_os": {
+          "type": "string"
+        },
+        "runtime_version": {
+          "type": "string"
+        },
+        "memory_estimate": {
+          "type": "string"
+        }
+      }
+    },
+    "deployment_requirements": {
+      "type": "object",
+      "properties": {
+        "target_host": {
+          "type": "string"
+        },
+        "configuration_template": {
+          "type": "string"
+        }
+      }
+    },
+    "maintenance_requirements": {
+      "type": "string",
+      "description": "Expected upkeep, update frequency, or operational monitoring"
     },
     "modules": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["module_id", "title", "objective", "key_takeaway"],
+        "required": [
+          "module_id",
+          "title",
+          "objective"
+        ],
         "properties": {
-          "module_id": {"type": "string"},
-          "title": {"type": "string"},
-          "objective": {"type": "string"},
-          "key_takeaway": {"type": "string"},
-          "components": {"type": "array", "items": {"type": "string"}}
+          "module_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "objective": {
+            "type": "string"
+          },
+          "key_takeaway": {
+            "type": "string"
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         }
       }
     },
-    "examples": {
-      "type": "array",
-      "items": {"type": "string"},
-      "description": "Real-world evidence-backed walkthroughs or sample outputs"
-    },
-    "templates": {
-      "type": "array",
-      "items": {"type": "string"},
-      "description": "Reusable fillable tools, calculators, checklists, or scaffolds"
-    },
-    "exercises": {
-      "type": "array",
-      "items": {"type": "string"},
-      "description": "Actionable practice steps for the user"
-    },
-    "bonuses": {
+    "artifacts": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["name", "purpose"],
+        "required": [
+          "id",
+          "name",
+          "format",
+          "role"
+        ],
         "properties": {
-          "name": {"type": "string"},
-          "purpose": {"type": "string"}
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "format": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "output_path": {
+            "type": "string"
+          }
         }
       }
     },
+    "bundle_components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "component_id",
+          "modality",
+          "description"
+        ],
+        "properties": {
+          "component_id": {
+            "type": "string"
+          },
+          "modality": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "responsible_agent": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "For hybrid products, the specific components spanning multiple modalities"
+    },
     "design_requirements": {
       "type": "object",
-      "required": ["theme", "visual_tone", "key_visual_components"],
       "properties": {
-        "theme": {"type": "string"},
-        "visual_tone": {"type": "string"},
-        "key_visual_components": {"type": "array", "items": {"type": "string"}}
+        "theme": {
+          "type": "string"
+        },
+        "visual_tone": {
+          "type": "string"
+        },
+        "key_visual_components": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
       }
     },
     "distribution_assumptions": {
       "type": "object",
-      "required": ["primary_channel", "creator_collaboration_hypothesis"],
       "properties": {
-        "primary_channel": {"type": "string"},
-        "creator_collaboration_hypothesis": {"type": "string"}
+        "primary_channel": {
+          "type": "string"
+        },
+        "creator_collaboration_hypothesis": {
+          "type": "string"
+        }
       }
     },
     "pricing_hypothesis": {
       "type": "object",
       "properties": {
-        "suggested_price_tier": {"type": "string"},
-        "rationale": {"type": "string"}
+        "suggested_price_tier": {
+          "type": "string"
+        },
+        "rationale": {
+          "type": "string"
+        }
       }
     },
     "quality_criteria": {
       "type": "array",
-      "items": {"type": "string"},
-      "description": "Explicit criteria required for Critic audit approval"
+      "items": {
+        "type": "string"
+      },
+      "description": "Explicit criteria required for QA and Critic audit approval"
     }
   }
 }

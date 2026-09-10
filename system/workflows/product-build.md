@@ -1,118 +1,73 @@
 # PRODUCT BUILD & QUALITY WORKFLOW
 
-This workflow guides execution from opportunity approval through strategy, construction, design, packaging, red-team audit, and revision loops.
+This workflow guides execution from opportunity approval through product strategy, modality decision, technical architecture, software and artifact construction, design, modality-specific QA, packaging, red-team audit, release engineering, shipment, and revision loops.
+
+> **CORE INVARIANT: * Never assume the solution is a document. Dynamically select the appropriate agent routing based on the required customer transformation.
 
 ---
 
-## Stage 5: Product Strategy & Specification (GATE 2)
+3# Stage 5: Product Strategy & Modality Decision (GATE)2)
 
 1. **State Update:**
    - `workflow.stage = "product_strategy"`
    - `workflow.last_completed_stage = "opportunity_selection"`
-   - `workflow.next_required_action = "Formulating product specification and awaiting Human Approval Gate 2"`
+   - `workflow.next_required_action = "Formulating product specification, evaluating modality tradeoffs, and awaiting Human Approval Gate 2"`
 2. **Worker Delegation:**
-   - Launch `product-strategist` to translate approved opportunity into `products/<product_id>/specification.json` and `products/<product_id>/strategy.md` complying with `system/schemas/product.schema.json`.
-   - Defines target customer, core problem, job-to-be-done, transformation (`from_state` → `to_state`), promise, unique mechanism, format rationale, modules, templates, bonuses, and quality criteria.
+   - Launch `product-strategist` to translate approved opportunity into `products/<product_id>/specification.json` (complying with `system/schemas/product.schema.json`) and `products/<product_id>/strategy.md`.
+   - **Modality Comparison Required:** Explicitly compare (1) Simplest Valid Solution, (2) Best CX Solution, and (3) Higher-Complexity Solution. Record selection rationale and rejected modalities.
 3. **HUMAN APPROVAL GATE 2:**
-   - Master reviews specification and pauses to invoke `ask_question` for user approval of product format, promise, and scope.
-   - Update `state.json` (`product.id`, `product.name`, `product.type`, `product.status = "specified"`).
-   - Log decision in `memory/decisions.md`.
+   - Master presents specification via `ask_question` for user approval of product modality, core promise, and transformation scope.
+   - Update `state.json` (`product.id`, `product.name`, `product.type`, `product.modality`, `product.status = "specified"`).
 
 ---
 
-## Stage 6: Product Construction
+## Stage 6: Technical Architecture (When Required)
+
+1. **Applicability:** Executed for software, web, mobile, desktop, interactive tools, APIs, databases, automations, and hybrids. Skipped for validated documents or simple spreadsheets.
+2. **State Update:**
+   - `workflow.stage = "product_strategy"` (sub-stage architecture)
+   - `product.architecture_status = "in_progress"`
+3. **Worker Delegation:**
+   - Launch `solution-architect` to produce `products/<product_id>/architecture.md` and `architecture.json`. Defines system topology, data schemas, API endpoints, authentication, and security baseline. Update `architecture.status = "complete"`.
+
+---
+
+## Stage 7: Product Construction & Build
 
 1. **State Update:**
    - `workflow.stage = "product_build"`
    - `workflow.last_completed_stage = "product_strategy"`
-   - `workflow.next_required_action = "Constructing modular product content, tools, and templates"`
-2. **Worker Delegation:**
-   - Launch `product-builder` following the approved sequence:
-     `SPECIFICATION → CONTENT PLAN → CONTENT → STRUCTURE → TOOLS/TEMPLATES → ASSEMBLY → SELF-CHECK`.
-   - Writes working files to `products/<product_id>/content/` and `products/<product_id>/assets/`.
-   - Compiles final usable deliverable under `products/<product_id>/final/`.
-3. **Safety & Integrity Invariants:**
-   - Zero generic AI filler, fake case studies, or unverified claims.
-   - All factual assertions must cite IDs in `memory/sources.csv`.
-   - **Escalation Trigger:** If builder discovers a strategic contradiction or missing evidence, it must halt and escalate to Master rather than improvising.
+   - `workflow.next_required_action = "Executing modality-directed build"`
+2. **Dynamic Build Routing:**
+   - **Documents & Templates:** `product-builder` (-> `products/<id>/content/`) -> `artifact-builder` (-> `products/<id>/final/` & `artifact-manifest.json`).
+   - **Software, Web, Mobile, API, Database:** `software-builder` (-> `products/<id>/software/`, writes build/scripts/tests) - verified by `run_command`.
+   - **Hybrid:** Coordinated parallel builds across `software-builder` and `artifact-builder`.
 
 ---
 
-## Stage 7: Design System & Visual Execution (GATE 3)
-
-1. **State Update:**
-   - `workflow.stage = "design"`
-   - `workflow.last_completed_stage = "product_build"`
-   - `workflow.next_required_action = "Developing visual design system and awaiting Human Approval Gate 3"`
-2. **Worker Delegation:**
-   - Launch `design-director` to establish `design/<product_id>/design-system.md` defining typography, spacing, color palette, component patterns, worksheets, presentation slide standards, and layout grids.
-3. **HUMAN APPROVAL GATE 3:**
-   - Master presents core visual direction and theme for user approval.
-   - Once approved, `design-director` applies the design system to format the deliverables in `products/<product_id>/final/`.
-   - Update `state.json` (`design.theme`, `design.status = "applied"`).
+## Stage 8: Design System (GATE 3)
+1. Launch `design-director` to establish `design/<product_id>/design-system.md`.
+2. I HUMAN APPROVAL GATE 3: User approves visual theme, components, and typography before final asset compilation.
 
 ---
 
-## Stage 8: Commercial Packaging
-
-1. **State Update:**
-   - `workflow.stage = "packaging"`
-   - `workflow.last_completed_stage = "design"`
-   - `workflow.next_required_action = "Creating truthful product packaging, mockups, and landing page copy"`
-2. **Worker Delegation:**
-   - Launch `packaging` agent to inspect the completed final product in `products/<product_id>/final/` and create:
-     - Title treatment and cover/hero visual direction
-     - Product mockups specification
-     - Concise product description and benefit breakdown
-     - Offer structure, bonuses, and FAQ
-     - Landing page copy and call-to-action
-     - Short-form promotional visual hooks
-   - Writes assets into `packaging/<product_id>/`.
-3. **Truthfulness Rule:**
-   - Packaging claims must directly map to existing, inspected product components. No exaggerated outcomes or invented testimonials.
+## Stage 9: Commercial Packaging & Release Preparation
+1. **Packaging Agent:** Inspects actual finished deliverables, produces truthful landing page copy, offer structure, and mockups in `packaging/<product_id>/`.
+2. **Release Engineer:** Assembles deployment bundles or ZIP archives, writes `delivery-manifest.json`, distinguishing BUILDABLE/ DEPLOYABLE vs DEPLOYED.
 
 ---
 
-## Stage 9: Adversarial Quality Audit
+## Stage 10: Adversarial Quality Audit (Red Team)
+1. **Modality-Specific Verification:**
+   - `artifact-qa`: Verifies file formats, clipping, alignment, formulas (XLSX), pagination. (`artifact-qa.json`).
+   - `software-qa`: Runs actual compilation, automated tests, API contracts, responsiveness, security audit. (`software-qa.json`).
+   - `critic`: Adversarial red-team audit across problem-fit, factual accuracy (`sources.csv`), usability, and differentiation. (`audit.json`).
+2. If any CRITICAL or un-waived HIGH defects exist, status is `AAAL`. Proceed to Revision Loop.
 
-1. **State Update:**
-   - `workflow.stage = "audit"`
-   - `workflow.last_completed_stage = "packaging"`
-   - `workflow.next_required_action = "Conducting adversarial red-team audit"`
-2. **Worker Delegation:**
-   - Launch `critic` agent to perform an adversarial evaluation against `system/schemas/audit.schema.json`.
-   - The Critic actively seeks reasons NOT to ship across: Problem-Solution Fit, Factual Accuracy, Usability, Differentiation, Design Quality, Commercial Readiness, and Distribution Compatibility.
-3. **Artifacts Produced:**
-   - `products/<product_id>/audit/audit.json`
-   - `products/<product_id>/audit/report.md`
-4. **Audit Gate Evaluation:**
-   - Update `state.json` (`audit.status`, `audit.last_run`, `audit.critical_issues`, `audit.high_issues`).
-   - If `critical_issues > 0` or `high_issues > 0`: Status is `FAIL`. Proceed immediately to Stage 10 (Revision Loop).
-   - If `critical_issues == 0` and all `high_issues` are resolved or explicitly waived by Master with recorded justification: Status is `PASS`.
+## Stage 11: Revision Loop
 
----
+Route defects to owners (`product-builder`, `software-builder`, `artifact-builder`, `design-director`, `packaging`, `release-engineer`). Rerun QA and critic audit until PASS.
 
-## Stage 10: Revision Loop (If Audit Fails)
+## Stage 12: Final Product & Distribution Approval (GATE. 4)
 
-1. **State Update:**
-   - `workflow.stage = "revision"`
-   - `workflow.status = "running"`
-   - `workflow.next_required_action = "Remediating audit findings by assigned owners"`
-2. **Remediation Routing:**
-   - Master reviews findings in `audit.json` and routes each defect to its designated owner:
-     - Factual / usability defects → `product-builder`
-     - Visual / layout defects → `design-director`
-     - Copy / claim mismatches → `packaging`
-     - Structural / positioning gaps → `product-strategist`
-3. **Verification:**
-   - Remediation owners fix only the affected components without modifying unrelated project files.
-   - Master triggers `critic` to rerun the audit.
-   - Repeat until audit status is `PASS`.
-
----
-
-## Stage 11: Final Product Approval (GATE 4)
-
-1. After audit passes, Master pauses and presents the final product package for **HUMAN APPROVAL GATE 4**.
-2. Upon user approval:
-   - Advance to Distribution workflow (`system/workflows/distribution.md`).
+Master presents complete verified package for user final sign-off before deployment or distribution partner outreach.
