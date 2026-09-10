@@ -1,0 +1,54 @@
+# Operating System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# IDE & Editor Configuration
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
+
+# Environment Variables, Secrets & Credentials
+.env
+.env.*
+*.local
+*.pem
+*.key
+*.cert
+secrets.json
+
+# Node & Python Temporary Files
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+*.venv
+venv/
+ENV/
+
+# Antigravity CLI Runtime & Transient Logs
+*.log
+.tmp/
+.cache/
+brain/
+scratch/
+
+# Build & Distribution Artifacts
+dist/
+build/
+*.bak

@@ -1,0 +1,4 @@
+{
+  "$schema": "../system/schemas/customer.schema.json",
+  "profiles": []
+}

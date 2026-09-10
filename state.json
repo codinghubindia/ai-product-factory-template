@@ -1,0 +1,48 @@
+{
+  "project": {
+    "id": "product-factory-001",
+    "name": "AI Product Factory",
+    "version": "0.1.0"
+  },
+  "workflow": {
+    "stage": "idle",
+    "status": "waiting_for_user",
+    "last_completed_stage": null,
+    "next_required_action": "Select target industry or provide customer problem to initiate discovery",
+    "current_blocking_issue": null
+  },
+  "discovery": {
+    "industry": null,
+    "target_customer": null,
+    "search_scope": [],
+    "research_window": null
+  },
+  "opportunity": {
+    "selected_id": null,
+    "name": null,
+    "status": null,
+    "confidence": null
+  },
+  "product": {
+    "id": null,
+    "name": null,
+    "type": null,
+    "status": null
+  },
+  "design": {
+    "theme": null,
+    "status": null
+  },
+  "packaging": {
+    "status": null
+  },
+  "distribution": {
+    "status": null
+  },
+  "audit": {
+    "status": null,
+    "last_run": null,
+    "critical_issues": 0,
+    "high_issues": 0
+  }
+}

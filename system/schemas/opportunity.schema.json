@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Opportunity",
+  "type": "object",
+  "required": [
+    "id",
+    "name",
+    "industry",
+    "customer",
+    "problem",
+    "job_to_be_done",
+    "root_problem",
+    "evidence",
+    "scores",
+    "confidence",
+    "risks",
+    "recommended_product_formats",
+    "status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier, e.g. OPP-001"
+    },
+    "name": {
+      "type": "string",
+      "description": "Descriptive opportunity title"
+    },
+    "industry": {
+      "type": "string",
+      "description": "Domain or market sector"
+    },
+    "customer": {
+      "type": "string",
+      "description": "Specific target customer profile or segment"
+    },
+    "problem": {
+      "type": "string",
+      "description": "Observed customer problem statement in customer language"
+    },
+    "job_to_be_done": {
+      "type": "string",
+      "description": "Underlying functional and emotional objective the customer seeks"
+    },
+    "root_problem": {
+      "type": "string",
+      "description": "Core systemic or workflow cause generating the symptoms"
+    },
+    "current_workarounds": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Imperfect hacks or manual steps currently used"
+    },
+    "existing_solutions": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Existing products or services and why they leave gaps"
+    },
+    "observed_gap": {
+      "type": "string",
+      "description": "Precise unmet need or differentiation vector"
+    },
+    "potential_mechanism": {
+      "type": "string",
+      "description": "The unique digital solution mechanism to deliver the transformation"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["source_id", "supports_claim"],
+        "properties": {
+          "source_id": {"type": "string"},
+          "url": {"type": "string"},
+          "source_tier": {"type": "integer", "minimum": 1, "maximum": 5},
+          "quote_or_finding": {"type": "string"},
+          "supports_claim": {"type": "string"}
+        }
+      },
+      "description": "List of verifiable sources supporting this opportunity"
+    },
+    "scores": {
+      "type": "object",
+      "required": [
+        "demand",
+        "pain_intensity",
+        "frequency",
+        "purchase_intent",
+        "monetization",
+        "competition",
+        "buildability",
+        "differentiation",
+        "timing",
+        "distribution",
+        "creator_fit",
+        "evidence_confidence",
+        "overall"
+      ],
+      "properties": {
+        "demand": {"type": "number", "minimum": 0, "maximum": 100},
+        "pain_intensity": {"type": "number", "minimum": 0, "maximum": 100},
+        "frequency": {"type": "number", "minimum": 0, "maximum": 100},
+        "purchase_intent": {"type": "number", "minimum": 0, "maximum": 100},
+        "monetization": {"type": "number", "minimum": 0, "maximum": 100},
+        "competition": {"type": "number", "minimum": 0, "maximum": 100},
+        "buildability": {"type": "number", "minimum": 0, "maximum": 100},
+        "differentiation": {"type": "number", "minimum": 0, "maximum": 100},
+        "timing": {"type": "number", "minimum": 0, "maximum": 100},
+        "distribution": {"type": "number", "minimum": 0, "maximum": 100},
+        "creator_fit": {"type": "number", "minimum": 0, "maximum": 100},
+        "evidence_confidence": {"type": "number", "minimum": 0, "maximum": 100},
+        "overall": {"type": "number", "minimum": 0, "maximum": 100}
+      }
+    },
+    "score_rationale": {
+      "type": "object",
+      "description": "Evidence-based justification for extreme scores (<30 or >70)"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Overall epistemic confidence score (distinct from attractiveness)"
+    },
+    "risks": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Material execution, market, distribution, or regulatory risks"
+    },
+    "recommended_product_formats": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Candidate formats, e.g. toolkit, workbook, guide, template system"
+    },
+    "creator_distribution_angle": {
+      "type": "string",
+      "description": "Hypothesis for how creator demonstration and audience fit would operate"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["discovered", "validated", "ranked", "selected", "rejected", "archived"]
+    }
+  }
+}

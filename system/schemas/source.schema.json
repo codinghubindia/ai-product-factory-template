@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Research Source",
+  "type": "object",
+  "required": ["source_id", "url", "title", "source_type", "retrieved_at", "relevance", "evidence_status"],
+  "properties": {
+    "source_id": {
+      "type": "string",
+      "description": "Unique identifier for the source, e.g., SRC-001"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "description": "Direct canonical URL of the source"
+    },
+    "title": {
+      "type": "string",
+      "description": "Title or headline of the source material"
+    },
+    "author": {
+      "type": ["string", "null"],
+      "description": "Author, organization, or user who produced the content"
+    },
+    "published_at": {
+      "type": ["string", "null"],
+      "description": "Original publication date in ISO 8601 or YYYY-MM-DD"
+    },
+    "retrieved_at": {
+      "type": "string",
+      "description": "Timestamp when this evidence was collected"
+    },
+    "source_type": {
+      "type": "string",
+      "description": "Format/platform: reddit, forum, review, industry_report, academic, documentation, interview, news"
+    },
+    "source_tier": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Tier 1: primary/official/academic; Tier 2: reputable industry/journalism; Tier 3: credible secondary; Tier 4: community discussion; Tier 5: unattributed/SEO content"
+    },
+    "relevance": {
+      "type": "string",
+      "description": "Why this source matters to the investigated problem"
+    },
+    "key_finding": {
+      "type": "string",
+      "description": "Precise factual finding or verifiable observation extracted from the source"
+    },
+    "evidence_status": {
+      "type": "string",
+      "enum": ["verified", "partially_verified", "unverified", "contradicted"],
+      "description": "Verification status determined by Source Auditor"
+    },
+    "supports_claims": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Specific claim IDs or statements directly supported by this source"
+    },
+    "corroborated_by": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "List of independent source IDs that substantiate the same claim"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Epistemic confidence score (0-100) based on independence and source reliability"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Contextual caveats, limitations, or excerpts"
+    }
+  }
+}

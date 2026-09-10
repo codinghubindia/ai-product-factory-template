@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Customer Profile",
+  "type": "object",
+  "required": ["id", "segment", "industry", "role", "jobs_to_be_done", "acute_pains", "current_workarounds", "evidence_source_ids"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique customer profile identifier, e.g., CUST-001"
+    },
+    "segment": {
+      "type": "string",
+      "description": "Descriptive name for the customer segment"
+    },
+    "industry": {
+      "type": "string",
+      "description": "Target industry or domain"
+    },
+    "role": {
+      "type": "string",
+      "description": "Typical job title or user persona"
+    },
+    "sophistication_level": {
+      "type": "string",
+      "enum": ["novice", "intermediate", "advanced", "mixed"],
+      "description": "Domain expertise and technical comfort"
+    },
+    "jobs_to_be_done": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Primary functional, emotional, and social jobs the customer is trying to get done"
+    },
+    "acute_pains": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Specific high-friction pain points, bottlenecks, or costs"
+    },
+    "current_workarounds": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Hacks, spreadsheets, manual steps, or imperfect combinations used today"
+    },
+    "existing_solutions_used": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Incumbent software, services, or resources currently used and their drawbacks"
+    },
+    "willingness_to_pay_signals": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Observed evidence of commercial intent, budget authority, or alternative spending"
+    },
+    "communication_channels": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Where this audience gathers, learns, and evaluates solutions"
+    },
+    "evidence_source_ids": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Source IDs in sources.csv supporting this profile"
+    }
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Product Specification",
+  "type": "object",
+  "required": [
+    "product_id",
+    "name",
+    "format",
+    "format_rationale",
+    "target_customer",
+    "problem",
+    "job_to_be_done",
+    "transformation",
+    "promise",
+    "unique_mechanism",
+    "positioning",
+    "structure",
+    "modules",
+    "examples",
+    "templates",
+    "exercises",
+    "bonuses",
+    "design_requirements",
+    "distribution_assumptions",
+    "quality_criteria"
+  ],
+  "properties": {
+    "product_id": {
+      "type": "string",
+      "description": "Unique identifier, e.g. PROD-001"
+    },
+    "name": {
+      "type": "string",
+      "description": "Working product name or title"
+    },
+    "format": {
+      "type": "string",
+      "enum": ["template_system", "actionable_guide", "workbook", "toolkit_bundle", "presentation_deck", "hybrid"],
+      "description": "Selected primary delivery format"
+    },
+    "format_rationale": {
+      "type": "string",
+      "description": "Why this format best delivers the transformation for this customer"
+    },
+    "target_customer": {
+      "type": "object",
+      "required": ["segment", "role", "sophistication_level"],
+      "properties": {
+        "segment": {"type": "string"},
+        "role": {"type": "string"},
+        "sophistication_level": {"type": "string"}
+      }
+    },
+    "problem": {
+      "type": "string",
+      "description": "Specific problem being solved"
+    },
+    "job_to_be_done": {
+      "type": "string",
+      "description": "Customer functional and emotional objective"
+    },
+    "transformation": {
+      "type": "object",
+      "required": ["from_state", "to_state"],
+      "properties": {
+        "from_state": {"type": "string"},
+        "to_state": {"type": "string"}
+      }
+    },
+    "promise": {
+      "type": "string",
+      "description": "Core product promise"
+    },
+    "unique_mechanism": {
+      "type": "string",
+      "description": "Distinctive methodology, system, or framework that powers the result"
+    },
+    "positioning": {
+      "type": "string",
+      "description": "Positioning relative to alternatives and current workarounds"
+    },
+    "structure": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["order", "title", "type", "description"],
+        "properties": {
+          "order": {"type": "integer"},
+          "title": {"type": "string"},
+          "type": {"type": "string"},
+          "description": {"type": "string"}
+        }
+      }
+    },
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["module_id", "title", "objective", "key_takeaway"],
+        "properties": {
+          "module_id": {"type": "string"},
+          "title": {"type": "string"},
+          "objective": {"type": "string"},
+          "key_takeaway": {"type": "string"},
+          "components": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "examples": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Real-world evidence-backed walkthroughs or sample outputs"
+    },
+    "templates": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Reusable fillable tools, calculators, checklists, or scaffolds"
+    },
+    "exercises": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Actionable practice steps for the user"
+    },
+    "bonuses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "purpose"],
+        "properties": {
+          "name": {"type": "string"},
+          "purpose": {"type": "string"}
+        }
+      }
+    },
+    "design_requirements": {
+      "type": "object",
+      "required": ["theme", "visual_tone", "key_visual_components"],
+      "properties": {
+        "theme": {"type": "string"},
+        "visual_tone": {"type": "string"},
+        "key_visual_components": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "distribution_assumptions": {
+      "type": "object",
+      "required": ["primary_channel", "creator_collaboration_hypothesis"],
+      "properties": {
+        "primary_channel": {"type": "string"},
+        "creator_collaboration_hypothesis": {"type": "string"}
+      }
+    },
+    "pricing_hypothesis": {
+      "type": "object",
+      "properties": {
+        "suggested_price_tier": {"type": "string"},
+        "rationale": {"type": "string"}
+      }
+    },
+    "quality_criteria": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Explicit criteria required for Critic audit approval"
+    }
+  }
+}
