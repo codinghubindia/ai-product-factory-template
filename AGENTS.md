@@ -102,7 +102,200 @@ The Master Agent operates with bounded autonomy. It must halt and solicit explic
 
 ---
 
-## 5. THE SIGNATURE MECHANISM MANDATE
+## 5. ⚠️ MANDATORY SUBAGENT INVOCATION RULE
+
+> **This rule is absolute. It has no exceptions.**
+
+**WHEN A WORKFLOW STAGE ASSIGNS A TASK TO A SPECIALIZED AGENT, THE MASTER MUST INVOKE THAT AGENT USING `invoke_subagent`.**
+
+The following behaviors are explicitly prohibited:
+
+| Prohibited behavior | Why it is prohibited |
+|---|---|
+| Master says "I will research Reddit myself" when Scout is assigned | Self-substitution |
+| Master says "I will verify the sources" when Source-Auditor is assigned | Self-substitution |
+| Master says "I will design the product" when Design-Director is assigned | Self-substitution |
+| Master says "I will build the PDF" when Artifact-Builder is assigned | Self-substitution |
+| Master says "I inspected it, so QA is complete" when QA agents are required | False stage completion |
+| Master produces the worker's expected output internally | Simulation, not delegation |
+| Master describes what the worker would do but does not invoke it | Documentation, not delegation |
+| Master performs a direct web search as a substitute for Scout or Research | Self-substitution |
+| Master writes artifacts directly as a substitute for a builder agent | Self-substitution |
+
+**Describing delegation, simulating a worker, or producing a worker's output does NOT satisfy the stage completion requirement.**
+
+### If invocation fails:
+1. **STOP the stage.**
+2. Log the failure in the delegation log: `invocation_status: "failed"`.
+3. **Report the failure** — agent name, task, error reason.
+4. **Do NOT perform the task yourself as a fallback.**
+5. Await human direction on how to proceed.
+
+---
+
+## 6. PARALLELIZATION RULE
+
+The Master must identify independent tasks within each stage and invoke them concurrently using simultaneous `invoke_subagent` calls.
+
+**Examples of required parallelization:**
+
+| Stage | Parallel agents |
+|---|---|
+| Discovery | `scout` + `research` + `competitor` |
+| Validation (where inputs allow) | `source-auditor` + `competitor` |
+| QA | `artifact-qa` + `software-qa` + `taste-reviewer` |
+| Audit + Packaging prep | `critic` + `packaging` preparation |
+| Product build | Independent content modules, independent software services |
+
+**Never parallelize:**
+- Tasks where Agent B requires Agent A's artifact as direct input
+- Tasks where both agents would write to the same shared file
+- Gate-guarded stages — complete the gate before advancing
+
+---
+
+## 7. WORKER TRUST RULE
+
+After every worker returns, the Master must treat its output as **evidence to be critically evaluated**, not truth to be blindly accepted.
+
+Required verification steps:
+1. Read worker output and summary.
+2. Verify the required artifact FILE exists at the specified path.
+3. Verify the file is non-empty and well-formed.
+4. Validate against expected schema (where applicable).
+5. Check for contradictions with other worker outputs.
+6. Resolve contradictions — document resolution in `memory/decisions.md`.
+7. Evaluate worker-flagged risks and uncertainties.
+8. Integrate results into state.
+9. Update `state.json`.
+10. Record invocation result in delegation log.
+
+---
+
+## 8. WORKER COMPLETION REQUIREMENTS
+
+Every worker invocation must return the following fields in its response:
+
+| Field | Description |
+|---|---|
+| `result` | Summary of what was accomplished |
+| `artifacts_created` | List of file paths written |
+| `sources_used` | Source IDs from memory/sources.csv |
+| `assumptions` | Explicit assumptions made during execution |
+| `uncertainties` | Unresolved questions that may affect downstream stages |
+| `risks` | Known risks in the output |
+| `confidence` | Numerical score 0–100 |
+| `recommended_next_step` | Worker's suggested next action |
+
+**A successful agent response without the required artifact does not count as stage completion.**
+
+The Master must verify the artifact file exists and is non-empty before recording stage completion.
+
+---
+
+## 9. STAGE COMPLETION GATES
+
+A stage may advance to the next stage ONLY when ALL of the following are true:
+
+- [ ] All required agent invocations occurred (not simulated, not described)
+- [ ] All required artifact files exist at their specified paths
+- [ ] All artifact files are non-empty
+- [ ] Schema validation passes for all structured output artifacts
+- [ ] Worker-reported contradictions have been resolved and documented
+- [ ] Stage-specific QA criteria satisfied
+- [ ] `state.json` updated to reflect stage completion
+- [ ] If a human gate applies: `ask_question` was invoked and the human approved
+
+**A stage is NOT complete because the Master produced a plausible answer internally.**
+
+---
+
+## 10. DELEGATION LOG REQUIREMENT
+
+The Master must maintain a delegation log for every active project at:
+`products/<product_id>/delegation-log.json`
+
+Schema: `system/schemas/delegation-log.schema.json`
+
+For every stage, record:
+- `stage`: lifecycle stage name
+- `required_agents`: agents that must be invoked
+- `invocations[]`: each entry contains `agent`, `task_id`, `start_time`, `end_time`, `result_artifact`, `artifact_verified`, `invocation_status`, `failure_reason`
+
+**A stage with `invocation_status: "not_invoked"` for a required agent is incomplete, regardless of any other evidence.**
+
+---
+
+## 11. SKILL-FIRST & TEMPLATE-FIRST ENFORCEMENT
+
+Before any specialist executes:
+1. Identify the relevant skill(s) in `.agents/skills/`
+2. Identify relevant templates in `templates/`
+3. Identify required scripts in `system/scripts/`
+4. Pass those resources explicitly to the worker in the invocation prompt
+5. After completion, verify the worker used them (artifact must reflect skill standards)
+
+Do not force workers to reinvent capabilities already encoded in factory skills.
+
+---
+
+## 12. PRODUCT BUILD ROUTING
+
+The Master chooses the appropriate routing based on the approved modality:
+
+**DOCUMENT / WORKBOOK:**
+`product-strategist → creative-director → design-director → product-builder → asset-director → artifact-builder → artifact-qa + taste-reviewer → packaging + marketing-strategist → critic`
+
+**TEMPLATE:**
+`product-strategist → creative-director → design-director → artifact-builder → artifact-qa + taste-reviewer → packaging → critic`
+
+**SOFTWARE / WEB / MOBILE / API / DATABASE:**
+`product-strategist → solution-architect → creative-director → design-director → software-builder → software-qa + artifact-qa + taste-reviewer → release-engineer → packaging + marketing-strategist → critic`
+
+**HYBRID:**
+`product-strategist → solution-architect → parallel builders (independent components only) → integration → unified QA → taste-reviewer → packaging → release-engineer → critic`
+
+---
+
+## 13. NO SELF-SUBSTITUTION (HARD EXAMPLES)
+
+These behaviors are explicitly prohibited by rule and will cause audit failure:
+
+```
+❌ PROHIBITED: "I will research Reddit myself." (when Scout is assigned)
+❌ PROHIBITED: "I will verify the sources myself." (when Source-Auditor is assigned)
+❌ PROHIBITED: "I will design the product." (when Design-Director is assigned)
+❌ PROHIBITED: "I will build the PDF myself." (when Artifact-Builder is assigned)
+❌ PROHIBITED: "I inspected it — QA is complete." (when QA agents required)
+❌ PROHIBITED: Writing the scout's community-signals.md directly.
+❌ PROHIBITED: Writing the critic's audit.json directly.
+❌ PROHIBITED: Writing the design-director's design-system.md directly.
+```
+
+The Master may perform **final integration and review**, but never silently replace specialist execution.
+
+---
+
+## 14. PRODUCT CONTAMINATION PROHIBITION
+
+The template must remain product-neutral between projects.
+
+**Product data lives exclusively in:** `products/<product_id>/`
+
+**Never store product-specific data in:**
+- `AGENTS.md` (this file)
+- Factory skills (`.agents/skills/`)
+- Reusable templates (`templates/`)
+- Factory-level documentation (`system/`)
+- `memory/` (except as referenced by `<product_id>` keys)
+
+Generic examples and test fixtures are permitted only when explicitly labelled as such with a comment noting they are examples, not real product data.
+
+Run `system/scripts/factory_health_check.py` to verify template cleanliness.
+
+---
+
+## 15. THE SIGNATURE MECHANISM MANDATE
 
 Every approved flagship product must engineer a distinctive, proprietary internal mechanism (`system/creative-product-concept.md`):
 - **Canonical Types:** Diagnostic Engine, Scoring Rubric, Transformation Ladder, Decision Matrix, Operating Cadence, or Root-Cause Sieve.
@@ -111,7 +304,7 @@ Every approved flagship product must engineer a distinctive, proprietary interna
 
 ---
 
-## 6. CUSTOMER WOW MOMENT & TIME-TO-FIRST-RESULT (TTFR)
+## 16. CUSTOMER WOW MOMENT & TIME-TO-FIRST-RESULT (TTFR)
 
 Every product must deliberately engineer a chronological customer journey (`system/customer-wow.md`):
 - **Time to First Useful Result (TTFR):** Must be strictly under **180 seconds** (3 minutes) for templates/documents, and under **60 seconds** for interactive software.
@@ -121,7 +314,7 @@ Every product must deliberately engineer a chronological customer journey (`syst
 
 ---
 
-## 7. VISUAL ASSET PIPELINE & LICENSE PROVENANCE
+## 17. VISUAL ASSET PIPELINE & LICENSE PROVENANCE
 
 Visual assets are engineered functional components, not decorative whitespace fillers (`system/image-asset-pipeline.md`):
 - **17-Point Asset Records:** Every visual asset must be cataloged in `products/<product_id>/assets/asset-manifest.json` complying with `asset-manifest.schema.json`.
@@ -131,7 +324,7 @@ Visual assets are engineered functional components, not decorative whitespace fi
 
 ---
 
-## 8. INDEPENDENT TASTE REVIEW & ANTI-AI-SLOP GATING
+## 18. INDEPENDENT TASTE REVIEW & ANTI-AI-SLOP GATING
 
 The `taste-reviewer` evaluates products independently of functional software testing (`system/scripts/taste_checker.py`):
 - **Core Invariant:** If a knowledgeable practitioner glances at the product and immediately thinks "an AI made this in 30 seconds", the product **FAILS** taste review unconditionally.
@@ -139,7 +332,7 @@ The `taste-reviewer` evaluates products independently of functional software tes
 
 ---
 
-## 9. ETHICAL PSYCHOLOGY & ABSOLUTE BAN ON DARK PATTERNS
+## 19. ETHICAL PSYCHOLOGY & ABSOLUTE BAN ON DARK PATTERNS
 
 Customer psychology must serve customer clarity, motivation, and comprehension—never manipulation against their interests:
 - **Strictly Prohibited:** Fake scarcity ("Only 3 copies left" on digital downloads), fake countdown timers, fake reviews/testimonials, deceptive pricing, hidden subscriptions, or roach-motel cancellation flows.
@@ -147,7 +340,7 @@ Customer psychology must serve customer clarity, motivation, and comprehension�
 
 ---
 
-## 10. THE 6-PART MASTER REVIEW STACK
+## 20. THE 6-PART MASTER REVIEW STACK
 
 Before final release sign-off (Gate 4), the product must pass all six layers of the review stack:
 1. `UTILITY REVIEW`: Does the product solve the problem reliably and completely?
@@ -159,8 +352,23 @@ Before final release sign-off (Gate 4), the product must pass all six layers of 
 
 ---
 
-## 11. TRUTHFUL PACKAGING & MERCHANDISING
+## 21. TRUTHFUL PACKAGING & MERCHANDISING
 
 - **Direct Mapping:** Every claim, benefit, mockup, and screenshot in sales and packaging materials must map directly to an inspected, functioning feature in the delivered product. Zero fabricated capabilities.
 - **Merchandising Blueprint:** Offer structure, tiering, promise, proof, and objection refutations documented in `merchandising.json` following `system/product-merchandising.md`.
 - **Demonstration Priority:** Creator outreach packs must feature a ready-to-record 60-second video demo script.
+
+---
+
+## 22. ACTUAL TOOL USE
+
+For real projects requiring tools:
+- Inspect the environment for available tools first.
+- Determine required tools for the build.
+- Install only what is necessary. Verify installation. Record versions.
+- Never refuse a build because a normal dependency is absent when it can reasonably be installed.
+- Never install unrelated technology.
+
+---
+
+*AGENTS.md version: 0.3.0 — Updated 2026-09-11: Added mandatory subagent invocation rule (§5), parallelization rule (§6), worker trust rule (§7), worker completion requirements (§8), stage completion gates (§9), delegation log requirement (§10), skill-first enforcement (§11), product build routing (§12), no self-substitution (§13), product contamination prohibition (§14). All sections renumbered.*

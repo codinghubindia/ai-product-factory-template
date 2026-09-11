@@ -1,15 +1,20 @@
 {
+  "factory_version": "0.3.0",
   "project": {
     "id": null,
     "name": null,
-    "version": "0.2.0"
+    "version": null
   },
   "workflow": {
     "stage": "idle",
     "status": "waiting_for_user",
     "last_completed_stage": null,
-    "next_required_action": "Select target industry or provide customer problem to initiate discovery",
+    "next_required_action": "Provide a target domain, industry, or customer segment to begin the discovery stage.",
     "current_blocking_issue": null
+  },
+  "delegation": {
+    "log_path": "system/delegation-log.schema.json",
+    "current_stage_invocations": []
   },
   "discovery": {
     "industry": null,
@@ -83,14 +88,14 @@
     "status": null,
     "last_run": null,
     "commercial_review_status": null,
-    "critical_issues": 0,
-    "high_issues": 0
+    "critical_issues": null,
+    "high_issues": null
   },
   "release": {
     "status": null,
     "deployment_status": null,
     "delivery_manifest_path": null,
-    "external_setup_required": false
+    "external_setup_required": null
   },
   "distribution": {
     "status": null

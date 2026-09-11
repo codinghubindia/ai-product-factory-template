@@ -1,317 +1,353 @@
-# AI Product Factory
+# AI Product Factory — Template
 
-An autonomous, disciplined multi-agent system designed to discover empirical customer pain, validate commercial viability, engineer high-utility digital products, establish authentic creative concepts, curate licensed visual assets, enforce publication-grade taste standards, and prepare creator-driven distribution.
+**Version:** 0.3.0 | **Status:** Clean Template (Product-Neutral) | **Last reset:** 2026-09-11
 
-Operated via the **Antigravity CLI** (`agy`).
+A production-grade, autonomous multi-agent system for turning empirically verified customer pain into commercially viable digital products — with enforced quality gates, real specialist delegation, and creator-driven distribution.
 
 ---
 
-## 1. Factory Architecture
+## Architecture Overview
 
-The factory orchestrates **23 specialized worker agents** under the sovereign direction of the **Master Agent**, organized across 6 functional hubs.
+### The Core Principle: Master Orchestrates, Specialists Execute
 
 ```mermaid
 flowchart TD
-    User["Human Operator (Gatekeeper)"] <--> Master["Master Orchestrator (State & Quality Custodian)"]
+    USER["👤 USER\n(provides domain/seed)"]
+    MASTER["🏛️ MASTER\nOrchestrator\n\nPlans · Delegates · Integrates\nVerifies · Gate Enforcer"]
 
-    subgraph Hub1["1. Discovery & Validation"]
-        Scout["scout"] --> Research["research"]
-        Research --> Auditor["source-auditor"]
-        Auditor --> Miner["pain-miner"]
-        Miner --> Comp["competitor"]
-        Comp --> OppAnalyst["opportunity-analyst"]
+    subgraph DISCOVERY_PARALLEL["⚡ Parallel Discovery"]
+        SCOUT["scout\n(community signals)"]
+        RESEARCH["research\n(market context)"]
+        COMPETITOR["competitor\n(competitive gaps)"]
     end
 
-    subgraph Hub2["2. Strategy & Creative Concept"]
-        Strat["product-strategist"] --> CreativeDir["creative-director"]
-        CreativeDir --> Arch["solution-architect"]
+    subgraph VALIDATION["Validation (Sequential)"]
+        PAIN["pain-miner\n(pain clusters)"]
+        AUDITOR["source-auditor\n(evidence audit)"]
     end
 
-    subgraph Hub3["3. Engineering & Assets"]
-        DesignDir["design-director"]
-        AssetDir["asset-director"]
-        ProdBuilder["product-builder"]
-        SoftBuilder["software-builder"]
-        ArtBuilder["artifact-builder"]
+    OPP_ANALYST["opportunity-analyst\n(scoring)"]
+
+    GATE1["🛑 GATE 1\nHuman Approval\n(opportunity selection)"]
+
+    STRATEGIST["product-strategist\n(specification)"]
+
+    GATE2["🛑 GATE 2\nHuman Approval\n(product strategy)"]
+
+    subgraph CREATIVE_ARCH["Creative & Architecture"]
+        CREATIVE["creative-director\n(concept + mechanism)"]
+        ARCHITECT["solution-architect\n(when required)"]
     end
 
-    subgraph Hub4["4. Quality & Taste Audit"]
-        SoftQA["software-qa"]
-        ArtQA["artifact-qa"]
-        TasteRev["taste-reviewer"]
-        Critic["critic (Red Team)"]
+    DESIGN["design-director\n(design system)"]
+
+    GATE3["🛑 GATE 3\nHuman Approval\n(design direction)"]
+
+    subgraph BUILD_PARALLEL["⚡ Parallel Build (independent modules)"]
+        PRODUCT_BUILDER["product-builder\n(content)"]
+        SOFTWARE_BUILDER["software-builder\n(code)"]
+        ASSET_DIRECTOR["asset-director\n(visual assets)"]
     end
 
-    subgraph Hub5["5. Merchandising & Distribution"]
-        MktgStrat["marketing-strategist"]
-        Packaging["packaging"]
-        RelEng["release-engineer"]
-        Distrib["distribution"]
+    ARTIFACT_BUILDER["artifact-builder\n(PDF/HTML/XLSX)"]
+
+    subgraph QA_PARALLEL["⚡ Parallel QA"]
+        ARTIFACT_QA["artifact-qa\n(file inspection)"]
+        SOFTWARE_QA["software-qa\n(functional testing)"]
+        TASTE["taste-reviewer\n(aesthetic gate)"]
     end
 
-    Master --> Hub1
-    Hub1 --> Master
-    Master --> Hub2
-    Hub2 --> Master
-    Master --> Hub3
-    Hub3 --> Hub4
-    Hub4 --> Master
-    Master --> Hub5
-    Hub5 --> Master
-```
-
-The Master Agent enforces state transitions recorded in `state.json`, durable repository memory (`memory/`), and four mandatory human approval gates using interactive decision prompts.
-
----
-
-## 2. Creator-Led Opportunity Discovery
-
-Raw signals are harvested from verbatim discussions and filtered through a multi-stage evidence sieve before human selection.
-
-```mermaid
-flowchart LR
-    A["Raw Web Signal (Reddit, GitHub, Reviews)"] --> B["source-auditor (Provenance Tiering 1-5)"]
-    B --> C["pain-miner (JTBD & Friction Clusters)"]
-    C --> D["competitor (Incumbent Gap Analysis)"]
-    D --> E["opportunity-analyst (12-Dimension Scoring)"]
-    E --> F["memory/opportunities.csv"]
-    F --> G["GATE 1: Human Approval (Opportunity Selection)"]
-```
-
-- **Verbatim Evidence:** Every pain hypothesis requires direct quotations from practitioners.
-- **Provenance Tiering:** Sources must meet Tier 1 (primary documentation) or Tier 2 (practitioner consensus) standards; anonymous blog hearsay is rejected.
-- **Transparent Scoring:** Opportunities are ranked across 12 commercial and technical dimensions including Pain Severity, Market Viability, and Demonstration Feasibility.
-
----
-
-## 3. Product Modality Selection
-
-The factory rejects the assumption that every digital product should be a PDF or an ebook. It systematically evaluates three solution levels across 21+ supported modalities:
-
-```mermaid
-flowchart TD
-    In["Validated Opportunity (Gate 1 Approved)"] --> Eval["product-strategist (Modality Evaluation)"]
-
-    Eval --> OptA["Level 1: Simplest Valid Solution (Checklist, Model, SOP Playbook)"]
-    Eval --> OptB["Level 2: Best CX Solution (Interactive PWA, Responsive Calculator, Tool)"]
-    Eval --> OptC["Level 3: Higher-Complexity Solution (Full-Stack Web App, Native Mobile, API)"]
-
-    OptA --> Select["Decision Gate: Select Simplest Mechanism that Delivers Full Transformation"]
-    OptB --> Select
-    OptC --> Select
-
-    Select --> Spec["products/product_id/specification.json"]
-    Spec --> Gate2["GATE 2: Human Approval (Modality & Strategy)"]
-```
-
-Supported modalities include:
-- **Documents & Publishing:** Executive Playbooks, Manuals, Whitepapers, Workbooks.
-- **Templates & Calculators:** Financial Models, Spreadsheets, Diagnostic Rubrics.
-- **Software Applications:** Progressive Web Apps, Single-Page Apps, CLI Utilities, Desktop Tools.
-- **Backend & Data:** REST APIs, Curated SQLite Databases, Automation Scripts, Webhooks.
-- **Hybrid Suites:** Multi-tier coordinated bundles combining software, playbooks, and templates.
-
----
-
-## 4. Creative Concept & Signature Mechanism Layer
-
-Before visual design or software construction, the `creative-director` establishes the product's emotional core, visual metaphor, and proprietary mechanism.
-
-```mermaid
-flowchart TD
-    Strategy["Product Strategy (Target Audience & Transformation)"] --> Concept["creative-director (Creative Product Concept)"]
-
-    subgraph CoreConcept["Creative Dimensions"]
-        Personality["Product Personality & Archetype"]
-        Metaphor["Visual Metaphor & Mental Model"]
-        Mechanism["Signature Mechanism (Proprietary Engine)"]
-        Wow["Customer Wow Moment (TTFR < 180s)"]
-        World["Visual World (Palette, Typography, Texture)"]
+    subgraph COMMERCIAL["Commercial Preparation"]
+        PKG["packaging\n(landing page)"]
+        MKT["marketing-strategist\n(merchandising)"]
     end
 
-    Concept --> CoreConcept
-    CoreConcept --> Doc["products/product_id/creative-concept.md"]
-    Doc --> Gate3["GATE 3: Human Approval (Major Design System)"]
+    CRITIC["critic\n(red-team audit)"]
+    RELEASE["release-engineer\n(bundle + manifest)"]
+
+    GATE4["🛑 GATE 4\nHuman Approval\n(final release)"]
+
+    DISTRIBUTION["distribution\n(creator outreach)"]
+
+    COMPLETE["✅ COMPLETE"]
+
+    %% Flow
+    USER -->|"provides domain"| MASTER
+    MASTER -->|"invoke_subagent ×3"| DISCOVERY_PARALLEL
+    DISCOVERY_PARALLEL -->|"results consolidated"| MASTER
+    MASTER -->|"invoke_subagent ×2"| VALIDATION
+    VALIDATION -->|"results consolidated"| MASTER
+    MASTER -->|"invoke_subagent"| OPP_ANALYST
+    OPP_ANALYST --> GATE1
+    GATE1 -->|"human selects"| MASTER
+    MASTER -->|"invoke_subagent"| STRATEGIST
+    STRATEGIST --> GATE2
+    GATE2 -->|"human approves"| MASTER
+    MASTER -->|"invoke_subagent ×2"| CREATIVE_ARCH
+    CREATIVE_ARCH -->|"results consolidated"| MASTER
+    MASTER -->|"invoke_subagent"| DESIGN
+    DESIGN --> GATE3
+    GATE3 -->|"human approves"| MASTER
+    MASTER -->|"invoke_subagent ×3"| BUILD_PARALLEL
+    BUILD_PARALLEL -->|"integrated"| ARTIFACT_BUILDER
+    ARTIFACT_BUILDER --> MASTER
+    MASTER -->|"invoke_subagent ×3"| QA_PARALLEL
+    QA_PARALLEL -->|"all results"| MASTER
+    MASTER -->|"invoke_subagent ×2"| COMMERCIAL
+    COMMERCIAL --> MASTER
+    MASTER -->|"invoke_subagent"| CRITIC
+    CRITIC --> MASTER
+    MASTER -->|"invoke_subagent"| RELEASE
+    RELEASE --> GATE4
+    GATE4 -->|"human approves"| MASTER
+    MASTER -->|"invoke_subagent"| DISTRIBUTION
+    DISTRIBUTION --> COMPLETE
+
+    %% Styling
+    style MASTER fill:#1a1a2e,color:#ffffff,stroke:#4a4a8a
+    style GATE1 fill:#8B0000,color:#ffffff,stroke:#ff0000
+    style GATE2 fill:#8B0000,color:#ffffff,stroke:#ff0000
+    style GATE3 fill:#8B0000,color:#ffffff,stroke:#ff0000
+    style GATE4 fill:#8B0000,color:#ffffff,stroke:#ff0000
+    style DISCOVERY_PARALLEL fill:#0d4f2f,color:#ffffff
+    style BUILD_PARALLEL fill:#0d4f2f,color:#ffffff
+    style QA_PARALLEL fill:#0d4f2f,color:#ffffff
+    style COMPLETE fill:#155724,color:#ffffff
 ```
 
-- **The Signature Mechanism:** Every flagship deliverable must engineer an internal engine (Diagnostic Sieve, 90-Day Cadence, Scoring Rubric, or Decision Matrix) that can be demonstrated on video in under 60 seconds.
-- **Customer Wow Moment:** The Time to First Useful Result (TTFR) must occur within 180 seconds of opening the deliverable, delivering an immediate micro-win without setup friction.
+> **The Master does NOT replace specialist workers.** Every `invoke_subagent` call in the diagram represents a real invocation. The Master coordinates, verifies, and integrates — but never silently performs a worker's primary task.
 
 ---
 
-## 5. Visual Asset Generation & Provenance Pipeline
+## Mandatory Invocation Rule
 
-Visual assets are engineered functional components governed by a 13-step production pipeline and cataloged in a formal manifest.
+> **When a workflow stage assigns a task to a specialized agent, the Master MUST invoke that agent using `invoke_subagent`.**
 
-```mermaid
-flowchart LR
-    Req["Asset Requirement (Role, Placement, Aspect Ratio)"] --> Continuity["Check Visual Continuity (Palette, Lighting, Texture)"]
-    Continuity --> Gen["Generate (generate_image) or Source Licensed Vector"]
-    Gen --> Rights["Audit License Status (CC0, MIT, Factory Original)"]
-    Rights --> IsoQA["Isolation QA (Artifacts, Dimensions, DPI)"]
-    IsoQA --> Manifest["Catalog in asset-manifest.json (17 Attributes)"]
-    Manifest --> Integrate["Embed in Deliverable (HTML, PDF, App)"]
-    Integrate --> LayoutQA["In-Context Layout QA"]
-```
+| ❌ Prohibited | ✅ Required |
+|---|---|
+| Master writes community-signals.md itself | Master invokes `scout` → verifies artifact |
+| Master researches the market itself | Master invokes `research` → verifies artifact |
+| Master designs the product itself | Master invokes `design-director` → verifies artifact |
+| Master declares QA complete by inspection | Master invokes `artifact-qa` + `software-qa` + `taste-reviewer` |
+| Master builds the PDF itself | Master invokes `artifact-builder` → verifies artifact |
+| Master declares critic PASS without invoking | Master invokes `critic` → reads audit.json |
 
-- **Zero Whitespace Fillers:** Visual assets are generated only to clarify complex architecture, establish visual anchors, or demonstrate product mechanics.
-- **Visual Continuity:** All assets within a product adhere to identical lighting, perspective, rendering style, and semantic color tokens.
-- **100% Provenance:** Every asset records its generator prompt or canonical source URL, licensing status, and dimensions in `products/<product_id>/assets/asset-manifest.json`.
+**If invocation fails:** Stop the stage. Report the failure. Do NOT silently perform the task as a fallback.
 
 ---
 
-## 6. Product Build, Testing & Usability QA
+## The 23 Specialist Agents
 
-Products are compiled into real, executable physical files and runtimes, followed by multi-stage automated testing.
+### Discovery & Validation Hub
+| Agent | Responsibility | Primary Artifact |
+|---|---|---|
+| `scout` | Raw community pain signal harvesting | `research/raw/community-signals.md` |
+| `research` | Market context, workflows, benchmarks | `research/verified/market-context.md` |
+| `pain-miner` | Pain clustering, JTBD analysis | `research/synthesis/pain-clusters.md` |
+| `source-auditor` | Evidence provenance auditing | `research/verified/source-audit.md` |
+| `competitor` | Competitive gap mapping | `research/synthesis/competitive-analysis.md` |
+| `opportunity-analyst` | 12-dimension opportunity scoring | `memory/opportunities.csv` |
 
-```mermaid
-flowchart TD
-    Design["Design Tokens & Layout Grid"] --> Builders["Builders (product-builder, software-builder, artifact-builder)"]
+### Strategy & Creative Hub
+| Agent | Responsibility | Primary Artifact |
+|---|---|---|
+| `product-strategist` | Product specification, modality decision | `products/<id>/specification.json` |
+| `creative-director` | Creative concept, signature mechanism | `products/<id>/creative-concept.md` |
+| `solution-architect` | Technical architecture (when required) | `products/<id>/architecture.md` |
 
-    subgraph BuildOutputs["Real Production Deliverables"]
-        HTML["Publication HTML & ReportLab PDF"]
-        XLSX["Native openpyxl Spreadsheets"]
-        Code["Runnable Codebase & Dependency Manifest"]
-    end
+### Engineering & Assets Hub
+| Agent | Responsibility | Primary Artifact |
+|---|---|---|
+| `product-builder` | Content, chapters, worksheets | `products/<id>/content/` |
+| `software-builder` | Executable software, APIs, databases | `products/<id>/software/` |
+| `artifact-builder` | PDF, HTML, XLSX, DOCX, ZIP output | `products/<id>/deliverables/` |
+| `design-director` | Visual system, typography, grid | `design/<id>/design-system.md` |
+| `asset-director` | Image generation, licensing, catalog | `products/<id>/assets/asset-manifest.json` |
 
-    Builders --> BuildOutputs
+### Quality, Taste & Red Team Hub
+| Agent | Responsibility | Primary Artifact |
+|---|---|---|
+| `artifact-qa` | Physical file inspection | `products/<id>/audit/artifact-qa.json` |
+| `software-qa` | Functional testing, link audit | `products/<id>/audit/software-qa.json` |
+| `taste-reviewer` | Aesthetic gate, anti-AI-slop | `products/<id>/audit/taste-review.md` |
+| `critic` | Adversarial red-team audit | `products/<id>/audit/audit.json` |
 
-    BuildOutputs --> FuncQA["Functional QA (software_runner.py & Unit Tests)"]
-    BuildOutputs --> FormulaQA["Usability QA (template_usability_tester.py)"]
-    BuildOutputs --> LinkQA["Link Integrity (link_checker.py)"]
-    BuildOutputs --> DiffQA["Visual Regression (visual_regression_diff.py)"]
-
-    FuncQA --> QAReport["Audit Reports in products/product_id/audit/"]
-    FormulaQA --> QAReport
-    LinkQA --> QAReport
-    DiffQA --> QAReport
-```
-
-- **Editorial Standards:** Books and guides adhere to the 24 Editorial Dimensions, 45–75 character line measures, drop caps, and 22mm print binding gutters.
-- **Handwriting Ergonomics:** Workbooks feature true 8.0mm–9.5mm (24pt–28pt) rule spacing and 16px checkboxes.
-- **Zero Formula Errors:** Spreadsheets are scanned for `#REF!`, `#DIV/0!`, `#VALUE!`, frozen panes, and explicit currency/percentage formatting.
-
----
-
-## 7. The 6-Part Premium Review Stack
-
-Before human release approval, the product must pass all six independent evaluation layers.
-
-```mermaid
-flowchart TD
-    Deliv["Finished Deliverable & Packaging Suite"] --> Stack["The 6-Part Review Stack"]
-
-    subgraph Reviews["Review Dimensions"]
-        R1["1. UTILITY REVIEW (Functional Completeness & Test Passing)"]
-        R2["2. DESIGN REVIEW (Grid Discipline & Typography Hierarchy)"]
-        R3["3. TASTE REVIEW (Restraint, Anti-AI-Slop, Niche Authenticity)"]
-        R4["4. PSYCHOLOGY REVIEW (TTFR < 180s, Zero Dark Patterns)"]
-        R5["5. COMMERCIAL REVIEW (Price-to-Craftsmanship Justification)"]
-        R6["6. CREATOR FIT REVIEW (60-Second Live Demonstration Test)"]
-    end
-
-    Stack --> Reviews
-    Reviews --> Critic["critic (Adversarial Red-Team Sign-Off)"]
-    Critic --> Gate4["GATE 4: Human Approval (Final Release & Distribution)"]
-```
-
-- **Taste Invariant:** A product fails taste review if a practitioner would judge it to look like generic, uninspired AI output.
-- **Absolute Ban on Dark Patterns:** Zero fake scarcity, zero countdown timers, zero fabricated social proof, and zero hidden costs.
+### Commercial & Distribution Hub
+| Agent | Responsibility | Primary Artifact |
+|---|---|---|
+| `marketing-strategist` | Customer psychology, merchandising | `products/<id>/merchandising.json` |
+| `packaging` | Landing page, offer structure | `packaging/<id>/landing-page.md` |
+| `release-engineer` | Release bundle, delivery manifest | `products/<id>/manifest.json` |
+| `distribution` | Creator fit, outreach packs | `distribution/<id>/creator-outreach-pack.md` |
 
 ---
 
-## 8. Creator-Audience Marketing Funnel
+## Parallel Execution Model
 
-Marketing assets emerge directly from the product's signature mechanism and verified transformation.
+The factory exploits independent task parallelism using simultaneous `invoke_subagent` calls:
 
-```mermaid
-flowchart LR
-    Hook["1. Creator Hook (Pattern Interrupt)"] --> Recog["2. Problem Recognition (Shared Pain)"]
-    Recog --> Demo["3. 60s Video Demo (Signature Mechanism in Action)"]
-    Demo --> Proof["4. Empirical Proof (Sources & Benchmarks)"]
-    Proof --> Land["5. Clean Landing Page (Zero Deception)"]
-    Land --> Checkout["6. Transparent Checkout (No Hidden Fees)"]
-    Checkout --> TTFR["7. First Value in < 180s"]
-    TTFR --> Share["8. Reusable Output Shared with Team"]
+```
+Discovery:    scout ──┐
+              research ─┤ (all simultaneously)
+              competitor┘
+
+QA:           artifact-qa ──┐
+              software-qa ───┤ (all simultaneously, on frozen build)
+              taste-reviewer─┘
+
+Build:        independent content modules (simultaneously)
+              independent software services (simultaneously)
 ```
 
-- **The 60-Second Rule:** If a product cannot be demonstrated live on screen in under 60 seconds, its transformation is refined until it can.
-- **Creator-Specific Presentation Layer:** The core product engine remains modular while presentation layers customize welcome notes, niche example data, and partner branding.
+**Rule:** Never parallelize tasks where Agent B requires Agent A's direct output. Complete dependencies before invoking dependents.
 
 ---
 
-## 9. Product Merchandising & Offer Ecosystem
+## Stage Completion Gates
 
-The factory structures deliverables into calibrated commercial tiers based on customer economics rather than forced funnels.
+A stage advances only when ALL of the following are verified:
 
-```mermaid
-flowchart TD
-    Entry["Free Entry Asset (Interactive Diagnostic / 1-Page Checklist)"] --> LowTicket["Low-Ticket Utility ($19-$49: Tactical Template / Playbook)"]
-    LowTicket --> Core["Core Flagship Product ($79-$199: Complete Operating System)"]
-    Core --> Bundle["Premium Professional Bundle ($249-$499: Suite + Architecture Blueprints)"]
-    Core -.-> Continuity["Optional Software / Data Continuity (Justified Compute/Updates Only)"]
-```
-
-Every offer documents customer problem, promise, transformation, contents, empirical proof, reason to believe, objection refutations, and next logical offer in `merchandising.json`.
-
----
-
-## 10. Repository Structure
-
-```text
-├── .agents/
-│   ├── agents/              # 23 specialized agent prompts
-│   └── skills/              # Reusable engineering and creative skills
-├── design/                  # Design systems and visual continuity specifications
-├── memory/                  # Persistent repository memory (sources.csv, opportunities.csv)
-├── packaging/               # Landing pages, creator briefs, and offer structures
-├── products/                # Product specifications, content, software, and final builds
-├── research/                # Raw community signals, verified evidence, and synthesis
-├── system/
-│   ├── schemas/             # Authoritative JSON schemas (product, asset, audit, etc.)
-│   ├── scripts/             # Deterministic Python build and verification tools
-│   ├── vendor/              # Local, reproducible dependencies (openpyxl, reportlab, pillow)
-│   └── workflows/           # Canonical stage-gate operating workflows
-├── templates/               # Reusable starter architectures for all product modalities
-├── AGENTS.md                # Governing workspace constitution
-├── README.md                # System overview and architecture
-└── state.json               # Single source of truth for runtime project state
-```
+1. ✅ All required agent invocations recorded in delegation log
+2. ✅ All required artifact files exist at expected paths
+3. ✅ All artifact files are non-empty
+4. ✅ Schema validation passes for structured artifacts
+5. ✅ Contradictions across worker outputs resolved
+6. ✅ Stage-specific QA criteria satisfied
+7. ✅ `state.json` updated to reflect stage completion
+8. ✅ If a human gate applies: `ask_question` called and approved
 
 ---
 
-## 11. Command Line Interface Reference
+## The 4 Mandatory Human Approval Gates
 
-The factory operates via the `system/scripts/` toolchain:
+| Gate | Timing | What the human decides |
+|---|---|---|
+| **GATE 1** | After opportunity scoring | Which opportunity to pursue |
+| **GATE 2** | After product specification | Product modality, scope, and transformation |
+| **GATE 3** | After design system | Visual tone, palette, typography, layout |
+| **GATE 4** | After all QA and audit | Final release and distribution sign-off |
+
+None of these gates can be bypassed. The Master halts and waits for explicit human response.
+
+---
+
+## Skill-First Execution
+
+Before invoking any specialist, the Master must:
+1. Identify the relevant skill in `.agents/skills/`
+2. Identify relevant templates in `templates/`
+3. Identify required scripts in `system/scripts/`
+4. Pass these explicitly to the worker in the invocation prompt
+
+**Available skills:**
+- `creative-direction` — Creative concept and worldbuilding
+- `premium-document-production` — Publication-grade documents
+- `editorial-design` — Books, playbooks, guides
+- `workbook-planner-design` — Workbooks, journals, planners
+- `pdf-publishing` — PDF compilation pipelines
+- `ui-ux-design` — Web and app interface design
+- `web-app-development` — Web application architecture
+- `mobile-app-development` — Mobile and PWA applications
+- `api-development` — REST/FastAPI API design
+- `database-engineering` — Schema design and migrations
+- `spreadsheet-engineering` — Excel/CSV engineering
+- `presentation-design` — Slide decks and pitch frameworks
+- `asset-generation` — Visual asset planning and generation
+- `artifact-qa` — Physical file QA protocols
+- `browser-testing` — Browser verification procedures
+- `software-testing` — 12-step software testing protocol
+- `taste-review` — Aesthetic critique and anti-AI-slop gating
+- `visual-quality-review` — Visual inspection and layout audit
+- `creative-marketing` — Creator outreach and funnels
+- `customer-psychology` — Ethical behavioral science
+- `release-packaging` — Delivery bundle standards
+- `print-production` — Physical print geometry
+
+---
+
+## Product Modality Routing
+
+```
+DOCUMENT / WORKBOOK:
+  product-strategist → creative-director → design-director
+  → product-builder → asset-director → artifact-builder
+  → artifact-qa + taste-reviewer (parallel)
+  → packaging + marketing-strategist
+  → critic → release-engineer → distribution
+
+SOFTWARE / WEB / MOBILE:
+  product-strategist → solution-architect → creative-director
+  → design-director → software-builder
+  → software-qa + artifact-qa + taste-reviewer (parallel)
+  → release-engineer → packaging + marketing-strategist
+  → critic → distribution
+
+HYBRID:
+  product-strategist → solution-architect
+  → parallel builders (independent components)
+  → integration → unified QA → taste-reviewer
+  → packaging → release-engineer → critic → distribution
+```
+
+---
+
+## Factory State
+
+The factory tracks its state in [`state.json`](./state.json).
+
+When `workflow.stage = "idle"` and `workflow.status = "waiting_for_user"`, the factory is clean and ready for a new project.
+
+Run the health check before starting any new project:
 
 ```bash
-# 1. Inspect host environment and tooling
-python system/scripts/tooling_manager.py --inspect
-
-# 2. Compile publication-grade document and PDF with outline bookmarks
-python system/scripts/pdf_compiler.py --html <path_to_html> --output <path_to_pdf>
-
-# 3. Audit spreadsheet formulas, error tokens, and frozen panes
-python system/scripts/template_usability_tester.py --input <path_to_xlsx_or_csv>
-
-# 4. Audit visual asset manifest, licensing, and image dimensions
-python system/scripts/asset_pipeline.py --manifest <path_to_asset_manifest.json>
-
-# 5. Audit deliverables for generic AI clichés, neon gradients, and formatting
-python system/scripts/taste_checker.py --input <path_to_file>
-
-# 6. Audit internal routes, hyperlinks, and button actions
-python system/scripts/link_checker.py <target_directory>
-
-# 7. Check for layout drift and visual regressions between builds
-python system/scripts/visual_regression_diff.py --base <baseline.pdf> --new <new.pdf>
-
-# 8. Inspect compiled artifacts for placeholders and header validity
-python system/scripts/artifact_inspector.py <target_directory>
+python system/scripts/factory_health_check.py
 ```
 
 ---
 
-## 12. Licensing & Governance
+## Repository Structure
 
-All agents operating in this repository are bound by the constitution in [AGENTS.md](AGENTS.md). All product claims, benchmarks, and citations must trace to empirical records in `memory/sources.csv`.
+```
+.agents/
+├── agents/          # 23 specialist agent definitions (agent.md files)
+└── skills/          # 22 specialized skill packs
+
+design/              # Per-product design systems (design/<product_id>/)
+distribution/        # Per-product creator outreach (distribution/<product_id>/)
+memory/              # Durable factory memory (sources.csv, opportunities.csv, decisions.md)
+packaging/           # Per-product landing pages (packaging/<product_id>/)
+products/            # Per-product workspace (products/<product_id>/)
+research/
+├── raw/             # Unfiltered scout output
+├── synthesis/       # Pain clusters, opportunities, competitive analysis
+└── verified/        # Source-audited research, market context
+system/
+├── schemas/         # JSON schemas for all structured artifacts
+├── scripts/         # Factory automation scripts (health check, builders, QA runners)
+├── test-fixtures/   # Internal delegation test infrastructure (NOT commercial products)
+├── workflows/       # Stage-by-stage workflow documentation
+└── agent-map.md     # Canonical agent responsibility map
+templates/           # Reusable starter templates by product modality
+
+state.json           # Current factory state (always reset to idle between projects)
+AGENTS.md            # Governing constitution (all agents must comply)
+```
+
+---
+
+## Key Invariants
+
+| Invariant | Enforcement |
+|---|---|
+| Master cannot self-substitute for workers | `AGENTS.md §13`, `master/agent.md §2` |
+| All worker invocations must be logged | `delegation-log.schema.json`, `state.json` |
+| No product contamination in factory files | `factory_health_check.py` contamination scan |
+| Human gates cannot be bypassed | `AGENTS.md §4`, `agent-map.md` |
+| QA must use designated QA agents | `product-build.md Stage 10` |
+| All claims must map to sources.csv | `AGENTS.md §12` |
+| Taste review required for every product | `agent-map.md Stage qa` |
+| Zero placeholders in deliverables | `artifact-qa`, `taste-reviewer` |
+
+---
+
+*AI Product Factory Template — v0.3.0. Clean template. No active product. Run `python system/scripts/factory_health_check.py` to verify.*

@@ -1,0 +1,161 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://ai-product-factory/delegation-log.schema.json",
+  "title": "AI Product Factory — Delegation Log",
+  "description": "Records every required worker invocation during a factory stage. A stage is NOT complete unless all required delegations are recorded here with confirmed artifacts.",
+  "type": "object",
+  "required": ["factory_version", "project_id", "stages"],
+  "properties": {
+    "factory_version": {
+      "type": "string",
+      "description": "Semantic version of the factory running this log."
+    },
+    "project_id": {
+      "type": ["string", "null"],
+      "description": "The product ID this log belongs to. Null if pre-product stages."
+    },
+    "stages": {
+      "type": "array",
+      "description": "Ordered list of stage delegation records.",
+      "items": {
+        "$ref": "#/definitions/StageRecord"
+      }
+    }
+  },
+  "definitions": {
+    "StageRecord": {
+      "type": "object",
+      "required": ["stage", "required_agents", "invocations", "stage_status"],
+      "properties": {
+        "stage": {
+          "type": "string",
+          "description": "Canonical lifecycle stage name (e.g. 'discovery', 'validation', 'product_strategy').",
+          "enum": [
+            "idle",
+            "discovery",
+            "research",
+            "validation",
+            "opportunity_selection",
+            "product_strategy",
+            "creative_concept",
+            "architecture",
+            "product_build",
+            "design",
+            "asset_pipeline",
+            "qa",
+            "taste_review",
+            "packaging",
+            "audit",
+            "revision",
+            "release",
+            "distribution",
+            "complete"
+          ]
+        },
+        "required_agents": {
+          "type": "array",
+          "description": "List of agent names that MUST be invoked for this stage to be considered complete.",
+          "items": { "type": "string" }
+        },
+        "optional_agents": {
+          "type": "array",
+          "description": "Agents that may be invoked if conditions warrant.",
+          "items": { "type": "string" }
+        },
+        "invocations": {
+          "type": "array",
+          "description": "Actual recorded invocations for this stage.",
+          "items": { "$ref": "#/definitions/Invocation" }
+        },
+        "stage_status": {
+          "type": "string",
+          "description": "Whether the stage has met its completion criteria.",
+          "enum": ["pending", "running", "complete", "failed", "blocked_by_gate"]
+        },
+        "gate_required": {
+          "type": ["string", "null"],
+          "description": "Human approval gate label if stage requires one (e.g. 'GATE_1', 'GATE_2', 'GATE_3', 'GATE_4')."
+        },
+        "gate_approved_at": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "description": "Timestamp when the human approval gate was passed."
+        },
+        "completion_notes": {
+          "type": ["string", "null"],
+          "description": "Free-text summary of stage outcome and any resolved conflicts."
+        }
+      }
+    },
+    "Invocation": {
+      "type": "object",
+      "required": ["agent", "task_id", "invocation_status"],
+      "description": "A single recorded agent invocation event.",
+      "properties": {
+        "agent": {
+          "type": "string",
+          "description": "Exact agent name (e.g. 'scout', 'research', 'design-director')."
+        },
+        "task_id": {
+          "type": "string",
+          "description": "Unique identifier for this invocation event (UUID or short slug)."
+        },
+        "task_description": {
+          "type": ["string", "null"],
+          "description": "Human-readable description of the task delegated to this agent."
+        },
+        "invocation_status": {
+          "type": "string",
+          "description": "Status of the invocation.",
+          "enum": ["invoked", "running", "completed", "failed", "not_invoked"]
+        },
+        "start_time": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "description": "ISO 8601 timestamp when the agent was invoked."
+        },
+        "end_time": {
+          "type": ["string", "null"],
+          "format": "date-time",
+          "description": "ISO 8601 timestamp when the agent returned a result."
+        },
+        "result_artifact": {
+          "type": ["string", "null"],
+          "description": "Relative path to the primary artifact this agent was expected to produce (e.g. 'research/raw/community-signals.md')."
+        },
+        "artifact_verified": {
+          "type": ["boolean", "null"],
+          "description": "Whether the Master confirmed the artifact actually exists and is non-empty after invocation."
+        },
+        "failure_reason": {
+          "type": ["string", "null"],
+          "description": "If invocation_status is 'failed' or 'not_invoked', the reason why."
+        },
+        "worker_confidence": {
+          "type": ["number", "null"],
+          "minimum": 0,
+          "maximum": 100,
+          "description": "Confidence score (0-100) reported by the worker agent for its output."
+        },
+        "worker_assumptions": {
+          "type": ["array", "null"],
+          "items": { "type": "string" },
+          "description": "Explicit assumptions the worker flagged in its output."
+        },
+        "worker_risks": {
+          "type": ["array", "null"],
+          "items": { "type": "string" },
+          "description": "Risks or uncertainties flagged by the worker."
+        },
+        "worker_recommended_next_step": {
+          "type": ["string", "null"],
+          "description": "The worker's recommended next action after completion."
+        },
+        "parallel_group": {
+          "type": ["string", "null"],
+          "description": "If this agent was invoked as part of a parallel batch, the group label (e.g. 'discovery_parallel_batch_1')."
+        }
+      }
+    }
+  }
+}

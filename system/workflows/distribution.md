@@ -2,57 +2,102 @@
 
 This workflow guides the preparation of targeted creator distribution partnerships and the final definition of done.
 
----
-
-## Stage 12: Distribution Strategy & Creator Partnerships
-
-1. **State Update:**
-   - `workflow.stage = "distribution"`
-   - `workflow.last_completed_stage = "audit"`
-   - `workflow.status = "running"`
-   - `workflow.next_required_action = "Analyzing creator fit and generating collaboration outreach assets"`
-2. **Inputs Read:**
-   - Final product deliverables in `products/<product_id>/final/`
-   - Customer profile in `memory/customers.json`
-   - Approved packaging assets in `packaging/<product_id>/`
-   - Passed audit report in `products/<product_id>/audit/report.md`
-3. **Worker Delegation:**
-   - Launch `distribution` agent to discover and vet creator collaboration channels.
-   - **Vetting Criteria:**
-     - Audience problem alignment (does their audience actively experience this pain?)
-     - Content format compatibility (tutorials, teardowns, workflow tours, short-form tips)
-     - Product demonstration feasibility (can the transformation be visually demonstrated in <60 seconds?)
-     - Creator credibility and trust in the target domain
-     - Commercial compatibility (history of relevant tools or digital products)
-     - **Strict Invariant:** Do not rank creators purely by follower count. Zero tolerance for fabricated email addresses, engagement statistics, or past sponsorship claims.
-4. **Artifacts Produced:**
-   - `distribution/<product_id>/creator-shortlist.md` (ranked candidates with evidence-backed rationale)
-   - `distribution/<product_id>/outreach/` containing tailored collaboration packs for top candidates:
-     - Specific collaboration angle and personalized hook
-     - Concise value proposition for the creator's audience
-     - 3 concrete short-form content ideas / demonstration scripts
-     - Suggested call-to-action (CTA) and lead magnet
-     - Proposed commercial structure (affiliate rev-share, upfront sponsorship hypothesis, or co-branded bonus)
-5. **Master Review:**
-   - Master reviews creator alignment and collaboration packs for realism and brand consistency.
-   - Update `state.json` (`distribution.status = "ready"`).
+> **Reminder:** The Master INVOKES `distribution` using `invoke_subagent`. The Master does not research, vet, or write creator outreach materials itself.
 
 ---
 
-## Stage 13: Factory Completion (Definition of Done)
+## Stage 16: Distribution Strategy & Creator Partnerships
 
-1. **State Update:**
-   - `workflow.stage = "complete"`
-   - `workflow.last_completed_stage = "distribution"`
-   - `workflow.status = "complete"`
-   - `workflow.next_required_action = "Project fully completed; ready for market launch or new project"`
-   - `workflow.current_blocking_issue = null`
-2. **Final Verification Checklist:**
-   - [x] Product specification fully satisfied (`products/<product_id>/specification.json`)
-   - [x] High-utility, usable final deliverables assembled (`products/<product_id>/final/`)
-   - [x] All claims backed by audited evidence in `memory/sources.csv`
-   - [x] Cohesive design system applied (`design/<product_id>/design-system.md`)
-   - [x] Truthful packaging and landing page assets ready (`packaging/<product_id>/`)
-   - [x] Critic audit passed with 0 critical defects (`products/<product_id>/audit/audit.json`)
-   - [x] Creator outreach materials generated (`distribution/<product_id>/`)
-   - [x] Project state (`state.json`) and decision log (`memory/decisions.md`) up to date
+### State Update
+```json
+{
+  "workflow.stage": "distribution",
+  "workflow.last_completed_stage": "release",
+  "workflow.status": "running",
+  "workflow.next_required_action": "Invoking distribution agent for creator fit analysis"
+}
+```
+
+### Prerequisite Verification
+```
+Before invoking distribution, Master must verify:
+  ✓ products/<product_id>/manifest.json exists
+  ✓ audit.json exists with audit.status = "PASS"
+  ✓ packaging/<product_id>/landing-page.md exists
+  ✓ Human Gate 4 has been approved
+```
+
+### Required Agent Invocation
+
+| Agent | Task | Required Artifacts | Dependency |
+|---|---|---|---|
+| `distribution` (**REQUIRED**) | Discover and vet creator collaboration channels by audience problem alignment, content format compatibility, demonstration feasibility, creator credibility | `distribution/<product_id>/creator-outreach-pack.md` | manifest.json + Gate 4 approval |
+
+### Invocation Protocol
+```
+INVOKE distribution
+  PASS: specification.json, creative-concept.md, landing-page.md, merchandising.json
+  PASS: .agents/skills/creative-marketing/SKILL.md
+  PASS: target customer profile from memory/customers.json
+  REQUIRE: ranked creator shortlist with evidence-backed rationale
+  REQUIRE: personalized collaboration packs for top candidates
+  PROHIBIT: ranking creators purely by follower count
+  PROHIBIT: fabricated email addresses, engagement statistics, or past sponsorship claims
+  → WAIT for response
+  → VERIFY: distribution/<product_id>/creator-outreach-pack.md exists and non-empty
+  → READ: verify creator vetting rationale is evidence-backed (not invented)
+  → Record invocation in delegation log
+  → UPDATE: state.json (distribution.status = "completed")
+```
+
+### Required Outreach Pack Contents
+Each creator outreach pack must include:
+- Specific collaboration angle and personalized hook (no generic templates)
+- Concise value proposition tailored to the creator's audience
+- 3 concrete short-form content ideas or demonstration scripts
+- Suggested call-to-action (CTA) and lead magnet
+- Proposed commercial structure (affiliate rev-share, upfront sponsorship hypothesis, or co-branded bonus)
+
+---
+
+## Stage 17: Factory Completion (Definition of Done)
+
+### Final Verification Checklist (Master performs this integration check)
+
+```
+UPDATE state.json:
+  workflow.stage = "complete"
+  workflow.last_completed_stage = "distribution"
+  workflow.status = "complete"
+  workflow.next_required_action = "Project fully completed; ready for market launch or new project"
+  workflow.current_blocking_issue = null
+```
+
+### Completion Gate — ALL items must be verified:
+
+| Item | Verification |
+|---|---|
+| Product specification satisfied | `products/<product_id>/specification.json` exists |
+| High-utility deliverables assembled | `products/<product_id>/deliverables/` has non-empty files |
+| All claims backed by audited evidence | `memory/sources.csv` entries correspond to all quantitative claims |
+| Design system applied | `design/<product_id>/design-system.md` exists |
+| QA passed | `artifact-qa.json` and/or `software-qa.json` show PASS |
+| Taste review passed | `taste-review.md` shows PASS |
+| Critic audit passed | `audit.json` shows 0 critical, 0 un-waived high issues |
+| Truthful packaging ready | `packaging/<product_id>/landing-page.md` exists |
+| Creator outreach generated | `distribution/<product_id>/creator-outreach-pack.md` exists |
+| Delegation log complete | All required agents recorded with `invocation_status: "completed"` |
+| Decision log updated | `memory/decisions.md` has Gate 4 approval entry |
+| state.json complete | All fields reflect final state |
+
+### After Completion
+
+The template resets for the next project:
+1. `products/<product_id>/` directory is preserved as project archive.
+2. `state.json` is reset to `idle` state for new project.
+3. `memory/opportunities.csv` and `memory/sources.csv` are preserved as project-specific references.
+4. Run `system/scripts/factory_health_check.py` to verify template cleanliness before the next project.
+
+---
+
+*Workflow version: 0.3.0 — Updated 2026-09-11: Added explicit INVOKE → WAIT → VERIFY protocol, prerequisite verification, delegation log recording, outreach pack content requirements, and post-completion template reset instructions.*
