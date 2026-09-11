@@ -2,7 +2,7 @@
   "project": {
     "id": null,
     "name": null,
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "workflow": {
     "stage": "idle",
@@ -29,37 +29,67 @@
     "type": null,
     "modality": null,
     "platforms": [],
-    "status": null
+    "status": null,
+    "production_readiness": null
+  },
+  "creative_concept": {
+    "status": null,
+    "concept_path": null,
+    "signature_mechanism": null,
+    "visual_world": null
   },
   "architecture": {
     "status": null,
     "blueprint_path": null
+  },
+  "design": {
+    "theme": null,
+    "status": null,
+    "design_system_path": null,
+    "visual_continuity_path": null
+  },
+  "asset_pipeline": {
+    "status": null,
+    "manifest_path": null,
+    "total_assets": 0,
+    "approved_assets": 0
   },
   "build": {
     "status": null,
     "software_build_status": null,
     "artifact_build_status": null
   },
-  "design": {
-    "theme": null,
-    "status": null
-  },
   "qa": {
     "artifact_qa_status": null,
-    "software_qa_status": null
+    "software_qa_status": null,
+    "visual_qa_status": null,
+    "taste_review_status": null,
+    "browser_qa_status": null,
+    "link_audit_status": null
   },
   "packaging": {
     "status": null
   },
+  "merchandising": {
+    "status": null,
+    "offer_structure": null
+  },
+  "marketing": {
+    "status": null,
+    "marketing_plan_path": null,
+    "creator_presentation_status": null
+  },
   "audit": {
     "status": null,
     "last_run": null,
+    "commercial_review_status": null,
     "critical_issues": 0,
     "high_issues": 0
   },
   "release": {
     "status": null,
     "deployment_status": null,
+    "delivery_manifest_path": null,
     "external_setup_required": false
   },
   "distribution": {

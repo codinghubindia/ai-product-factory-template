@@ -78,6 +78,9 @@
               "usability",
               "consistency",
               "visual_quality",
+              "taste_and_aesthetic_maturity",
+              "psychology_and_dark_patterns",
+              "asset_provenance_and_licensing",
               "positioning",
               "marketability",
               "creator_distribution_compatibility"
@@ -88,7 +91,17 @@
           "location": {"type": "string"},
           "remediation_owner": {
             "type": "string",
-            "enum": ["product-builder", "design-director", "packaging", "product-strategist", "opportunity-analyst"]
+            "enum": [
+              "product-builder",
+              "design-director",
+              "creative-director",
+              "asset-director",
+              "taste-reviewer",
+              "marketing-strategist",
+              "packaging",
+              "product-strategist",
+              "opportunity-analyst"
+            ]
           },
           "remediation_required": {"type": "string"}
         }
@@ -101,9 +114,10 @@
         "factual_accuracy": {"type": "string"},
         "usability": {"type": "string"},
         "visual_quality": {"type": "string"},
-        "differentiation": {"type": "string"},
-        "commercial_readiness": {"type": "string"},
-        "creator_fit": {"type": "string"}
+        "taste_review": {"type": "string"},
+        "psychology_review": {"type": "string"},
+        "commercial_review": {"type": "string"},
+        "creator_fit_review": {"type": "string"}
       }
     },
     "final_recommendation": {

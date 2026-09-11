@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Visual Asset Manifest",
+  "type": "object",
+  "required": [
+    "product_id",
+    "version",
+    "updated_at",
+    "assets"
+  ],
+  "properties": {
+    "product_id": { "type": "string" },
+    "version": { "type": "string" },
+    "updated_at": { "type": "string" },
+    "total_assets": { "type": "integer" },
+    "approved_assets": { "type": "integer" },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "asset_id",
+          "name",
+          "role",
+          "placement",
+          "type",
+          "source",
+          "license_status",
+          "aspect_ratio",
+          "dimensions",
+          "resolution_dpi",
+          "version",
+          "approved",
+          "used_in"
+        ],
+        "properties": {
+          "asset_id": {
+            "type": "string",
+            "pattern": "^ast-[a-z0-9-]+-v\\d+$"
+          },
+          "name": { "type": "string" },
+          "role": {
+            "type": "string",
+            "enum": [
+              "cover",
+              "chapter_opener",
+              "editorial_diagram",
+              "ui_mockup",
+              "device_frame",
+              "icon_set",
+              "background_texture",
+              "social_thumbnail",
+              "creator_promo",
+              "before_after",
+              "infographic",
+              "hero_imagery",
+              "decision_matrix",
+              "scorecard_badge",
+              "educational_schematic"
+            ]
+          },
+          "placement": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["svg", "png", "jpg", "jpeg", "webp"]
+          },
+          "source": {
+            "type": "string",
+            "enum": [
+              "generated",
+              "licensed_stock",
+              "public_domain",
+              "custom_vector_code",
+              "screenshot"
+            ]
+          },
+          "generated_or_sourced": { "type": "string" },
+          "prompt_or_source_ref": { "type": "string" },
+          "license_status": {
+            "type": "string",
+            "enum": [
+              "factory_original",
+              "cc0",
+              "mit",
+              "apache_2_0",
+              "commercial_royalty_free",
+              "editorial_reference_only"
+            ]
+          },
+          "aspect_ratio": {
+            "type": "string",
+            "enum": ["1:1", "16:9", "4:3", "3:2", "2:3", "3:4", "9:16"]
+          },
+          "dimensions": {
+            "type": "object",
+            "required": ["width", "height"],
+            "properties": {
+              "width": { "type": "integer" },
+              "height": { "type": "integer" }
+            }
+          },
+          "resolution_dpi": { "type": "integer" },
+          "color_profile": { "type": "string" },
+          "version": { "type": "integer" },
+          "approved": { "type": "boolean" },
+          "used_in": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "attribution_req": {
+            "type": ["string", "null"]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,287 +1,317 @@
-import os
+# AI Product Factory
 
-content = '''# AI Product Factory
+An autonomous, disciplined multi-agent system designed to discover empirical customer pain, validate commercial viability, engineer high-utility digital products, establish authentic creative concepts, curate licensed visual assets, enforce publication-grade taste standards, and prepare creator-driven distribution.
 
-An autonomous, multi-agent digital product engineering studio operating via **Google Antigravity CLI (`agy`)**.
-
-The AI Product Factory converts empirically verified customer pain into validated, high-utility digital products–spanning documents, templates, interactive tools, web applications, mobile/tablet software, browser extensions, APIs, databases, automations, and hybrid multi-format ecosystems.
+Operated via the **Antigravity CLI** (`agy`).
 
 ---
 
-## 1. What This Factory Is & The Problems It Solves
+## 1. Factory Architecture
 
-* **No Fake Market Demand:** All opportunity scoring requires primary evidence recorded in `memory/sources.csv`. Social volume or keyword metrics alone never justify building.
-* **The 'Document-Only' Assumption:** Most AI builders only output text. The II Product Factory evaluates 23 distinct digital modalities and chooses the simplest mechanism capable of delivering the customer transformation.
-* **Actual Software & Artifact Generation:** Software products generate real repositories with dependencies, configurations, tests, and build scripts.
- **Truthful Packaging:** Commercial copy is generated strictly from inspected final deliverables in `products/<product_id>/final/` or `products/<product_id>/software/`.
-* **Adversarial Quality Control:** Red-team quality control (`critic`, `software-qa`, `artifact-qa`) tests deliverables before any product can ship.
-
----
-
-## 2. Factory Core Lifecycle & Principle
-
-The factory operates strictly according to:
-```text
-CUSTOMER PROBLEM
-  -> DESIRED TRANSFORMATION
-  -> OPPORTUNITY
-  -> PRODUCT STRATEGY
-  -> PRODUCT MODALITY DECISION
-  -> TECH^ICAL ARCHITECTURE (WHEN REQUIRED)
-  -> CONSTRUCTION (CONTENT + SOFTWARE)
-  -> MODALITY-SPECIFIC QA
-  -> COMMERCIAL PACKAGING
-  -> RED TEAM AUDIT
-  -> HUMAN APPROVAL GATE 4
-  -> RELEASE (BUILDABLE / DEPLOYABLE)
-  -> CREATOR DISTRIBUTION
-```
-
----
-
-## 3. System Architecture & Orchestration
-
-The factory coordinates 18 specialized worker agents through a centralized Master orchestrator:
+The factory orchestrates **23 specialized worker agents** under the sovereign direction of the **Master Agent**, organized across 6 functional hubs.
 
 ```mermaid
 flowchart TD
+    User["Human Operator (Gatekeeper)"] <--> Master["Master Orchestrator (State & Quality Custodian)"]
 
-    User(["User / Human Operator"]) <-->|Approval Gates 1-w|Master["Master Orchestrator\n(state.json & 14-Stage Lifecycle)"]
-
-    
-    subgraph DiscoveryHub ["1. Discovery & Validation Hub"]
-        Scout["scout\n(Raw Signals)"] --> Research["research\n(Context & Benchmarks)"]
-        Scout --> PainMiner["pain-miner\n(JTBD & Problem Clusters)"]
-        Research --> Competitor["competitor\n(Competitive Gaps)"]
-        PainMiner --> SourceAuditor["source-auditor\n(5-Tier Fact Checking)"]
-        Competitor --> OppAnalyst["opportunity-analyst\n(12-Dimension Scoring)"]
-        SourceAuditor --> OppAnalyst
+    subgraph Hub1["1. Discovery & Validation"]
+        Scout["scout"] --> Research["research"]
+        Research --> Auditor["source-auditor"]
+        Auditor --> Miner["pain-miner"]
+        Miner --> Comp["competitor"]
+        Comp --> OppAnalyst["opportunity-analyst"]
     end
 
-    subgraph StrategyHub ["2. Strategy & Architecture Hub"]
-        Strategist["product-strategist\n(Modality & Blueprint)"]
-        Architect["solution-architect\n(Software & Security Topology)"]
-        Strategist --> Architect
+    subgraph Hub2["2. Strategy & Creative Concept"]
+        Strat["product-strategist"] --> CreativeDir["creative-director"]
+        CreativeDir --> Arch["solution-architect"]
     end
 
-    subgraph BuildTeam ["3. Engineering & Construction Hub"]
-        Design["design-director\n(Visual System)"]
-        SoftBuilder["software-builder\n(Apps, Web, Mobile, DB, CLI)"]
-        ArtBuilder["artifact-builder / product-builder\n(PDF, XLSX, PPMX, HTML, Templates)"]
+    subgraph Hub3["3. Engineering & Assets"]
+        DesignDir["design-director"]
+        AssetDir["asset-director"]
+        ProdBuilder["product-builder"]
+        SoftBuilder["software-builder"]
+        ArtBuilder["artifact-builder"]
     end
 
-    subgraph QAHub ["4. Modality QA & Red Team Hub"]
-        SoftQA["software-qa\n(Automated Tests & Viewports)"]
-        ArtQA["retifact-qa\n(Formulas, Layout & Clipping)"]
-        Critic["critic\n(Adversarial Audit & Quality Gate)"]
+    subgraph Hub4["4. Quality & Taste Audit"]
+        SoftQA["software-qa"]
+        ArtQA["artifact-qa"]
+        TasteRev["taste-reviewer"]
+        Critic["critic (Red Team)"]
     end
 
-    subgraph ReleaseHub ["5. Packaging, Release & Distribution Hub"]
-        Packaging["packaging\n(Truthful Copy & Mockups)"]
-        ReleaseEng["release-engineer\n(Builds, Docker, Delivery Manifest)"]
-        Distribution["distribution\n(Creator Vetting & Outreach)"]
+    subgraph Hub5["5. Merchandising & Distribution"]
+        MktgStrat["marketing-strategist"]
+        Packaging["packaging"]
+        RelEng["release-engineer"]
+        Distrib["distribution"]
     end
 
-    Master <--> DiscoveryHub
-    Master <--> StrategyHub
-    Master <--> BuildTeam
-    Master <--> QAHub
-    Master <--> ReleaseHub
+    Master --> Hub1
+    Hub1 --> Master
+    Master --> Hub2
+    Hub2 --> Master
+    Master --> Hub3
+    Hub3 --> Hub4
+    Hub4 --> Master
+    Master --> Hub5
+    Hub5 --> Master
 ```
+
+The Master Agent enforces state transitions recorded in `state.json`, durable repository memory (`memory/`), and four mandatory human approval gates using interactive decision prompts.
 
 ---
 
-## 4. Discovery Workflow
+## 2. Creator-Led Opportunity Discovery
 
-@``mermaid
-flowchart TD
+Raw signals are harvested from verbatim discussions and filtered through a multi-stage evidence sieve before human selection.
 
-    DomainSeed["user Domain / Problem Seed"] --> ScoutStep["scout: Harvest raw friction points\n(Reddit, forums, reviews)"]
-    ScoutStep --> LogSources[("Log verified URLs in\nmemory/sources.csv")]
-    ScoutStep --> ResearchStep["research: Map domain benchmarks\nand workflow constraints"]
-    ScoutStep --> PainStep["pain-miner: Synthesize JTBD\nand acute pain clusters"]
-    ResearchStep --> CompStep["competitor: Map incumbent flaws\nand pricing gaps"]
-    LogSources --> AuditStep["source-auditor: Verify claim support\nand freshness"]
-    PainStep --> ScoreStep{"opportunity-analyst: 12-dimension\nweighted scoring (scoring.md)"}
-    CompStep --> ScoreStep
-    AuditStep --> ScoreStep
-    ScoreStep --> Gate1{{"HUMAN APPROVAL GATE 1\nIdentify & approve opportunity ID"}}
-```
-
----
-
-## 5. Product Type & Modality Decision
-
-@``mermaid
-flowchart TD
-
-    ApprovedOpp["Approved Opportunity\n(Gate 1)"] --> Evaluate["product-strategist:\nEvaluate Solution Levels"]
-    Evaluate --> Level1["1. Simplest Valid Solution\n(Document, Spreadsheet, Template)"]
-    Evaluate --> Level2["2. Best CX Solution\n(Interactive Tool, PWA, Utility)"]
-    Evaluate --> Level3["3. Higher Complexity Solution\n(SaaS, Mobile, APIs, Multi-Agent)"]
-    Level1 --> Compare{"Evaluate Frequency, Data,\nInteraction & Monetization"}
-    Level2 --> Compare
-    Level3 --> Compare
-    Compare --> Decision["Select Modality & Record Rationale\n(products/<id>/specification.json)"]
-    Decision --> Gate2;{"HUMAN APPROVAL GATE 2\nUser approves format & promise"}}
-```
-
----
-
-## 6. Product Modality Branches & Routing
-
-@``mermaid
-flowchart TD
-
-    Gate2Approved["specification.json Approved (Gate 2)"] --> ModalityCheck{"Selected Modality?"}
-
-    
-    ModalityCheck -->|Document / Template| DocRoute["product-builder -> design-director\n-> artifact-builder -> artifact-qa"]
-    ModalityCheck -->|Interactive Tool| ToolRoute["solution-architect -> software-builder\n-> software-qa -> artifact-qa"]
-    ModalityCheck -->|Web / Mobile / Desktop| AppRoute["solution-architect -> design-director\n-> software-builder -> software-qa -> release-engineer"]
-    ModalityCheck -->|API / Service| APIRoute["solution-architect -> software-builder\n-> software-qa -> release-engineer"]
-    ModalityCheck -->|Database Product|DBRoute["solution-architect -> software-builder\n-> artifact-builder -> software-qa -> artifact-qa"]
-    ModalityCheck -->|Hybrid Ecosystem| HybridRoute["solution-architect -> parallel builders\n-> unified software & artifact QA -> release-engineer"]
-
-    DocRoute --> PackagingStage["packaging: Truthful offer & copy"]
-    ToolRoute --> PackagingStage
-    AppRoute --> PackagingStage
-    APIRoute --> PackagingStage
-    DBRoute --> PackagingStage
-    HybridRoute --> PackagingStage
-```
-
----
-
-## 7. Software Build & Artifact Pipeline
-
-@``mermaid
+```mermaid
 flowchart LR
-
-    subgraph SoftwareStream ["Software Generation Stream"]
-        ArchSpec["architecture.md\n& architecture.json"] --> SourceCode["src/, tests/, package.json\n& .env.example"]
-        SourceCode --> SoftBuild["Local sandbox build\n& automated test run"]
-        SoftBuild --> DeployArtifact["dist/ or Dockerfile\nor extension.zip"]
-    end
-
-    subgraph ArtifactStream ["File Artifact Stream"]
-        ContentDraft["product-builder drafts\n& structured data"] --> FileCompile["Python builder / HTML\n/ OpenPyXL / Pandoc"]
-        FileCompile --> PhysicalFile[.pdf, .xlsx, .pptx\nor template bundles]
-    end
-
+    A["Raw Web Signal (Reddit, GitHub, Reviews)"] --> B["source-auditor (Provenance Tiering 1-5)"]
+    B --> C["pain-miner (JTBD & Friction Clusters)"]
+    C --> D["competitor (Incumbent Gap Analysis)"]
+    D --> E["opportunity-analyst (12-Dimension Scoring)"]
+    E --> F["memory/opportunities.csv"]
+    F --> G["GATE 1: Human Approval (Opportunity Selection)"]
 ```
+
+- **Verbatim Evidence:** Every pain hypothesis requires direct quotations from practitioners.
+- **Provenance Tiering:** Sources must meet Tier 1 (primary documentation) or Tier 2 (practitioner consensus) standards; anonymous blog hearsay is rejected.
+- **Transparent Scoring:** Opportunities are ranked across 12 commercial and technical dimensions including Pain Severity, Market Viability, and Demonstration Feasibility.
 
 ---
 
-## 8. Adversarial QA Fedback & Revision Loop
+## 3. Product Modality Selection
+
+The factory rejects the assumption that every digital product should be a PDF or an ebook. It systematically evaluates three solution levels across 21+ supported modalities:
 
 ```mermaid
 flowchart TD
-    Deliverables["Deliverables Assembled\n(final/, software/, packaging/)"] --> QAExec["Execute software-qa & artifact-qa"]
-    QAExec --> CriticAudit["critic:\nAdversarial inspection across all dimensions"]
-    CriticAudit --> GenReport["Generate audit.json & report.md\n(Counts: critical, high, medium, low)"]
-    GenReport --> CheckStatus{"Audit Status?"}
-    CheckStatus -->|FAIL: critical 0 \nor un-waived high > 0| Revision["workflow.stage = 'revision'\nRoute defects to owners"]
-    Revision --> FixDefects["product-builder / software-builder\n/ design-director / packaging"]
-    FixDefects --> QAExec
-    CheckStatus -->|PASS: 0 critical,\n0 un-waived high| Gate4{{"HUMAN APPROVAL GATE 4\nUser signs off on final product"}}
+    In["Validated Opportunity (Gate 1 Approved)"] --> Eval["product-strategist (Modality Evaluation)"]
+
+    Eval --> OptA["Level 1: Simplest Valid Solution (Checklist, Model, SOP Playbook)"]
+    Eval --> OptB["Level 2: Best CX Solution (Interactive PWA, Responsive Calculator, Tool)"]
+    Eval --> OptC["Level 3: Higher-Complexity Solution (Full-Stack Web App, Native Mobile, API)"]
+
+    OptA --> Select["Decision Gate: Select Simplest Mechanism that Delivers Full Transformation"]
+    OptB --> Select
+    OptC --> Select
+
+    Select --> Spec["products/product_id/specification.json"]
+    Spec --> Gate2["GATE 2: Human Approval (Modality & Strategy)"]
 ```
+
+Supported modalities include:
+- **Documents & Publishing:** Executive Playbooks, Manuals, Whitepapers, Workbooks.
+- **Templates & Calculators:** Financial Models, Spreadsheets, Diagnostic Rubrics.
+- **Software Applications:** Progressive Web Apps, Single-Page Apps, CLI Utilities, Desktop Tools.
+- **Backend & Data:** REST APIs, Curated SQLite Databases, Automation Scripts, Webhooks.
+- **Hybrid Suites:** Multi-tier coordinated bundles combining software, playbooks, and templates.
 
 ---
 
-3# 9. Release & Distribution Pipeline
+## 4. Creative Concept & Signature Mechanism Layer
+
+Before visual design or software construction, the `creative-director` establishes the product's emotional core, visual metaphor, and proprietary mechanism.
 
 ```mermaid
 flowchart TD
+    Strategy["Product Strategy (Target Audience & Transformation)"] --> Concept["creative-director (Creative Product Concept)"]
 
-    Gate4Approved["sign-Off for Release (Gate 4)"] --> RelEng["release-engineer:\nAssemble release bundle &\nwrite delivery-manifest.json"]
-    RelEng --> DistStep["distribution:\nVet creators by pain alignment\n& prepare demo packs"]
-    DistStep --> CompleteStage["state.json: stage = 'complete'\nFactory cycle successful"]
+    subgraph CoreConcept["Creative Dimensions"]
+        Personality["Product Personality & Archetype"]
+        Metaphor["Visual Metaphor & Mental Model"]
+        Mechanism["Signature Mechanism (Proprietary Engine)"]
+        Wow["Customer Wow Moment (TTFR < 180s)"]
+        World["Visual World (Palette, Typography, Texture)"]
+    end
+
+    Concept --> CoreConcept
+    CoreConcept --> Doc["products/product_id/creative-concept.md"]
+    Doc --> Gate3["GATE 3: Human Approval (Major Design System)"]
+```
+
+- **The Signature Mechanism:** Every flagship deliverable must engineer an internal engine (Diagnostic Sieve, 90-Day Cadence, Scoring Rubric, or Decision Matrix) that can be demonstrated on video in under 60 seconds.
+- **Customer Wow Moment:** The Time to First Useful Result (TTFR) must occur within 180 seconds of opening the deliverable, delivering an immediate micro-win without setup friction.
+
+---
+
+## 5. Visual Asset Generation & Provenance Pipeline
+
+Visual assets are engineered functional components governed by a 13-step production pipeline and cataloged in a formal manifest.
+
+```mermaid
+flowchart LR
+    Req["Asset Requirement (Role, Placement, Aspect Ratio)"] --> Continuity["Check Visual Continuity (Palette, Lighting, Texture)"]
+    Continuity --> Gen["Generate (generate_image) or Source Licensed Vector"]
+    Gen --> Rights["Audit License Status (CC0, MIT, Factory Original)"]
+    Rights --> IsoQA["Isolation QA (Artifacts, Dimensions, DPI)"]
+    IsoQA --> Manifest["Catalog in asset-manifest.json (17 Attributes)"]
+    Manifest --> Integrate["Embed in Deliverable (HTML, PDF, App)"]
+    Integrate --> LayoutQA["In-Context Layout QA"]
+```
+
+- **Zero Whitespace Fillers:** Visual assets are generated only to clarify complex architecture, establish visual anchors, or demonstrate product mechanics.
+- **Visual Continuity:** All assets within a product adhere to identical lighting, perspective, rendering style, and semantic color tokens.
+- **100% Provenance:** Every asset records its generator prompt or canonical source URL, licensing status, and dimensions in `products/<product_id>/assets/asset-manifest.json`.
+
+---
+
+## 6. Product Build, Testing & Usability QA
+
+Products are compiled into real, executable physical files and runtimes, followed by multi-stage automated testing.
+
+```mermaid
+flowchart TD
+    Design["Design Tokens & Layout Grid"] --> Builders["Builders (product-builder, software-builder, artifact-builder)"]
+
+    subgraph BuildOutputs["Real Production Deliverables"]
+        HTML["Publication HTML & ReportLab PDF"]
+        XLSX["Native openpyxl Spreadsheets"]
+        Code["Runnable Codebase & Dependency Manifest"]
+    end
+
+    Builders --> BuildOutputs
+
+    BuildOutputs --> FuncQA["Functional QA (software_runner.py & Unit Tests)"]
+    BuildOutputs --> FormulaQA["Usability QA (template_usability_tester.py)"]
+    BuildOutputs --> LinkQA["Link Integrity (link_checker.py)"]
+    BuildOutputs --> DiffQA["Visual Regression (visual_regression_diff.py)"]
+
+    FuncQA --> QAReport["Audit Reports in products/product_id/audit/"]
+    FormulaQA --> QAReport
+    LinkQA --> QAReport
+    DiffQA --> QAReport
+```
+
+- **Editorial Standards:** Books and guides adhere to the 24 Editorial Dimensions, 45–75 character line measures, drop caps, and 22mm print binding gutters.
+- **Handwriting Ergonomics:** Workbooks feature true 8.0mm–9.5mm (24pt–28pt) rule spacing and 16px checkboxes.
+- **Zero Formula Errors:** Spreadsheets are scanned for `#REF!`, `#DIV/0!`, `#VALUE!`, frozen panes, and explicit currency/percentage formatting.
+
+---
+
+## 7. The 6-Part Premium Review Stack
+
+Before human release approval, the product must pass all six independent evaluation layers.
+
+```mermaid
+flowchart TD
+    Deliv["Finished Deliverable & Packaging Suite"] --> Stack["The 6-Part Review Stack"]
+
+    subgraph Reviews["Review Dimensions"]
+        R1["1. UTILITY REVIEW (Functional Completeness & Test Passing)"]
+        R2["2. DESIGN REVIEW (Grid Discipline & Typography Hierarchy)"]
+        R3["3. TASTE REVIEW (Restraint, Anti-AI-Slop, Niche Authenticity)"]
+        R4["4. PSYCHOLOGY REVIEW (TTFR < 180s, Zero Dark Patterns)"]
+        R5["5. COMMERCIAL REVIEW (Price-to-Craftsmanship Justification)"]
+        R6["6. CREATOR FIT REVIEW (60-Second Live Demonstration Test)"]
+    end
+
+    Stack --> Reviews
+    Reviews --> Critic["critic (Adversarial Red-Team Sign-Off)"]
+    Critic --> Gate4["GATE 4: Human Approval (Final Release & Distribution)"]
+```
+
+- **Taste Invariant:** A product fails taste review if a practitioner would judge it to look like generic, uninspired AI output.
+- **Absolute Ban on Dark Patterns:** Zero fake scarcity, zero countdown timers, zero fabricated social proof, and zero hidden costs.
+
+---
+
+## 8. Creator-Audience Marketing Funnel
+
+Marketing assets emerge directly from the product's signature mechanism and verified transformation.
+
+```mermaid
+flowchart LR
+    Hook["1. Creator Hook (Pattern Interrupt)"] --> Recog["2. Problem Recognition (Shared Pain)"]
+    Recog --> Demo["3. 60s Video Demo (Signature Mechanism in Action)"]
+    Demo --> Proof["4. Empirical Proof (Sources & Benchmarks)"]
+    Proof --> Land["5. Clean Landing Page (Zero Deception)"]
+    Land --> Checkout["6. Transparent Checkout (No Hidden Fees)"]
+    Checkout --> TTFR["7. First Value in < 180s"]
+    TTFR --> Share["8. Reusable Output Shared with Team"]
+```
+
+- **The 60-Second Rule:** If a product cannot be demonstrated live on screen in under 60 seconds, its transformation is refined until it can.
+- **Creator-Specific Presentation Layer:** The core product engine remains modular while presentation layers customize welcome notes, niche example data, and partner branding.
+
+---
+
+## 9. Product Merchandising & Offer Ecosystem
+
+The factory structures deliverables into calibrated commercial tiers based on customer economics rather than forced funnels.
+
+```mermaid
+flowchart TD
+    Entry["Free Entry Asset (Interactive Diagnostic / 1-Page Checklist)"] --> LowTicket["Low-Ticket Utility ($19-$49: Tactical Template / Playbook)"]
+    LowTicket --> Core["Core Flagship Product ($79-$199: Complete Operating System)"]
+    Core --> Bundle["Premium Professional Bundle ($249-$499: Suite + Architecture Blueprints)"]
+    Core -.-> Continuity["Optional Software / Data Continuity (Justified Compute/Updates Only)"]
+```
+
+Every offer documents customer problem, promise, transformation, contents, empirical proof, reason to believe, objection refutations, and next logical offer in `merchandising.json`.
+
+---
+
+## 10. Repository Structure
+
+```text
+├── .agents/
+│   ├── agents/              # 23 specialized agent prompts
+│   └── skills/              # Reusable engineering and creative skills
+├── design/                  # Design systems and visual continuity specifications
+├── memory/                  # Persistent repository memory (sources.csv, opportunities.csv)
+├── packaging/               # Landing pages, creator briefs, and offer structures
+├── products/                # Product specifications, content, software, and final builds
+├── research/                # Raw community signals, verified evidence, and synthesis
+├── system/
+│   ├── schemas/             # Authoritative JSON schemas (product, asset, audit, etc.)
+│   ├── scripts/             # Deterministic Python build and verification tools
+│   ├── vendor/              # Local, reproducible dependencies (openpyxl, reportlab, pillow)
+│   └── workflows/           # Canonical stage-gate operating workflows
+├── templates/               # Reusable starter architectures for all product modalities
+├── AGENTS.md                # Governing workspace constitution
+├── README.md                # System overview and architecture
+└── state.json               # Single source of truth for runtime project state
 ```
 
 ---
 
-## 10. The 18 Specialized Agents Roster
+## 11. Command Line Interface Reference
 
-All 18 agents reside in `.agents/agents/<name>/agent.md`:
+The factory operates via the `system/scripts/` toolchain:
 
-| Agent Name | Model | Role & Responsibility | Key Deliverables |
-| :--- | :--- | :--- | :--- |
-| **`master`** | ```pro```| Repository orchestrator, state manager, and human gatekeeper. | `state.json`, `memory/decisions.md` |
-|| **scout`** | ```flash`` | Harvests raw customer pain signals from public communities. | `research/raw/`, `memory/sources.csv` |
-| ***researchf* | ```pro`` | Investigates domain context, incumbent models, and benchmarks. | `research/verified` |
-| ***pain-miner`** | ```pro``| Clusters raw signals into jobs-to-be-done and root problems. | `research/synthesis/pain-clusters.md` |
-| **`source-auditor`** | ```pro``| Fact-checks all claims against Tier 1-5 source hierarchy. | `research/verified/source-audit.md` |
-| ***competitor`** | ```pro``| Maps competitor flaws and pricing gaps. | `research/synthesis/competitive-analysis.md` |
-| ***opportunity-analyst`** | ```pro``| 12-dimension weighted scoring and ranking. | `memory/opportunities.csv` |
-| ***product-strategist`** | ```pro`` | Specifies product blueprint, transformation, and modality decision. | `products/<product_id>/specification.json` |
-| **`solution-architect`** | ```pro`` | Technical architecture, data models, security, and deployment topology. | `products/<product_id>/architecture.md` |
-| **`software-builder`** | ```pro`` | Builds executable codebases (web, mobile, desktop, CLI, API, DB). | products/<product_id>/software/` |
-| **`artifact-builder`** | ```pro`` | Generates physical customer files (PDF, XLSX, PPMX, HTML, Infotypes). | `products/<product_id>/artifact-manifest.json` |
-| **`rproduct-builder`** | ```pro`` | Crafts modular content, frameworks, worksheets, and checklists. | `products/<product_id>/content/` |
-| ***design-director`** | ```pro`` | Establishes and applies visual systems adhering to 6 Pillars. | `design/<product_id>/design-system.md` |
-|| **software-qa`** | ```pro`` | Executes automated tests, builds, and viewport validation. | `products/<product_id>/audit/software-qa.json` |
-| **`artifact-qa`** | ```pro`` | Inspects rendered files for formatting, clipping, and formulas. | products/<product_id>/audit/artifact-qa.json` |
-| **`critic`** | ```pro`` | Adversarial red-team auditor with veto authority. | `products/<product_id>/audit/audit.json` |
-| ***packaging`** | ```pro`` | Truthful marketing copy, offer structures, and mockups. | `packaging/<product_id>/` |
-| ***release-engineer`** | ```pro``| Packages builds, installers, containers, and delivery manifest. | `products/<product_id>/delivery-manifest.json` |
-| **`distribution`** | ```pro`` | Vets creators and crafts customized collaboration packs. | `distribution/<product_id>/creator-shortlist.md` |
+```bash
+# 1. Inspect host environment and tooling
+python system/scripts/tooling_manager.py --inspect
 
----
+# 2. Compile publication-grade document and PDF with outline bookmarks
+python system/scripts/pdf_compiler.py --html <path_to_html> --output <path_to_pdf>
 
-## 11. Supported Product Modalities (23 Total)
+# 3. Audit spreadsheet formulas, error tokens, and frozen panes
+python system/scripts/template_usability_tester.py --input <path_to_xlsx_or_csv>
 
-The factory supports 23 specific digital product modalities (detailed in `system/product-types.md` and `system/product-output-matrix.md`):
-1. **Documents:** PDF, DOCX, EPU@, Markdown, HTML manuals, workbooks, playbooks.
-2. **Templates:** Notion, Excel, Google Sheets, Canva, Figma, CRM, prompt bundles.
-3. **Productivity Artifacts:** Formatted XLSX, XLSM, CSV, PPTX slide decks, fillable PDF forms.
-4. **Interactive Tools:** ROI estimators, scoring tools, diagnostics, configurators, calculators.
-5. **Web Applications:** Static websites, landing pages, responsive PWAs, full-stack web apps, client portals.
-6. **Mobile Applications:** iOS, Android, cross-platform mobile apps (React Native, Expo, Capacitor).
-7. **Tablet Applications:** Touch-optimized tablet apps, stylus workbooks, field inspection dashboards.
-8. **Desktop Applications:** Windows, macOS, Linux desktop apps (Tauri, Electron, Python GUI), local utilities.
-9. **Browser Extensions:** Chrome, Edge, and Firefox extensions (Manifest V3).
-10. **CLI / Developer Tools:** Command-line utilities, SDKs, npm/PyPI packages, code generators.
-11. **APIs & Services:** REST, GraphQL, webhook relays, microservices, containerized backends.
-12. **Database Products:** SQLite database files, SQL dump packs, migrations, data dictionaries.
-13. **Data Products:** Curated datasets, benchmark directories, structured research packs.
-14. **Automation:** n8n workflows, Make/Zapier recipes, scheduled Python pipelines, webhook automations.
-15. **AI Products:** RAG assistants, document Q&A tools, agentic workflows, prompt evaluation harnesses.
-16. **Multimedia:** Video/audio course scripts, curated SVG icon packs, graphic bundles.
-17. **Education:** Interactive course portals, training curricula, self-paced certification modules.
-18. **Games & Interactive:** Browser simulations, educational HTML5 games, gamified training.
-19. **Plugins & Integrations:** Figma plugins, WordPress plugins, Slack apps, Notion integrations.
-20. **Bots:** Slack, Discord, and Telegram conversational bots.
-21. **Device / Embedded:** Local IoT dashboards, hardware configuration utilities.
-22. **XR & 3D:** WebXR experiences, 3D interactive viewers, GLTF configurators.
-23. **Hybrid Products:** Coordinated multi-modality bundles (e.g. Web App + Strategy Playbook + Excel Model).
+# 4. Audit visual asset manifest, licensing, and image dimensions
+python system/scripts/asset_pipeline.py --manifest <path_to_asset_manifest.json>
+
+# 5. Audit deliverables for generic AI clichés, neon gradients, and formatting
+python system/scripts/taste_checker.py --input <path_to_file>
+
+# 6. Audit internal routes, hyperlinks, and button actions
+python system/scripts/link_checker.py <target_directory>
+
+# 7. Check for layout drift and visual regressions between builds
+python system/scripts/visual_regression_diff.py --base <baseline.pdf> --new <new.pdf>
+
+# 8. Inspect compiled artifacts for placeholders and header validity
+python system/scripts/artifact_inspector.py <target_directory>
+```
 
 ---
 
-## 12. Strategic Human Approval Gates
+## 12. Licensing & Governance
 
-The Master Agent operates with bounded autonomy and halts for explicit user approval at four gates:
-* **Gate 1 - Opportunity Selection:** User selects or approves the target opportunity ID.
-* **Gate 2 - Product Strategy and Scope:** User approves the product modality, promise, and complexity level.
-* **Gate 3 - Major Design Direction:** User approves visual theme, palette, and layout hierarchy.
-* **Gate 4 - Final Product and Distribution Release:** User gives final sign-off before packaging release and outreach.
-
----
-
-## 13. How to Start a Project in Antigravity
-1. Launch Antigravity CLI:
-   ```bash
-   agy
-   ```
-2. Verify all 18 custom agents are detected:
-   ```text
-   /agents
-   ```
-3. Start the Master Agent:
-   ```bash
-   agy --agent master
-   ```
-4. Provide a target domain or problem seed:
-   ```text
-   Master, initiate discovery in the developer tooling space focusing on API schema drift in microservices.
-   ```
+All agents operating in this repository are bound by the constitution in [AGENTS.md](AGENTS.md). All product claims, benchmarks, and citations must trace to empirical records in `memory/sources.csv`.

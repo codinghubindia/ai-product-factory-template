@@ -1,5 +1,5 @@
 {
-  "": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "Product Specification",
   "type": "object",
   "required": [
@@ -407,6 +407,23 @@
         },
         "creator_collaboration_hypothesis": {
           "type": "string"
+        },
+        "creator_specific_versioning": {
+          "type": "object",
+          "properties": {
+            "supported": {
+              "type": "boolean"
+            },
+            "configurable_elements": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "creator_onboarding_guide": {
+              "type": "string"
+            }
+          }
         }
       }
     },
@@ -427,6 +444,48 @@
         "type": "string"
       },
       "description": "Explicit criteria required for QA and Critic audit approval"
+    },
+    "creative_concept": {
+      "type": "object",
+      "description": "Creative concept path, personality, and visual world metadata",
+      "properties": {
+        "concept_path": { "type": "string" },
+        "personality_archetype": { "type": "string" },
+        "visual_metaphor": { "type": "string" }
+      }
+    },
+    "signature_mechanism": {
+      "type": "object",
+      "description": "Distinctive proprietary framework, engine, or rubric",
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "purpose": { "type": "string" },
+        "demonstration_potential": { "type": "string" }
+      }
+    },
+    "customer_wow": {
+      "type": "object",
+      "description": "Deliberately designed first value and peak memorable moment",
+      "properties": {
+        "ttfr_seconds": { "type": "integer" },
+        "first_visible_transformation": { "type": "string" },
+        "peak_moment": { "type": "string" }
+      }
+    },
+    "asset_manifest_path": {
+      "type": "string",
+      "description": "Path to visual asset manifest tracking 17-point asset records"
+    },
+    "merchandising_structure": {
+      "type": "object",
+      "description": "Commercial offer structure, tiering, and proof mechanisms",
+      "properties": {
+        "tier": { "type": "string" },
+        "price_usd": { "type": "number" },
+        "promise": { "type": "string" },
+        "next_logical_offer": { "type": "string" }
+      }
     }
   }
 }

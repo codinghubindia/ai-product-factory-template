@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Mobile Product Companion</title>
+  <meta name="theme-color" content="#0f172a">
+  <link rel="manifest" href="manifest.json">
+  <style>
+    :root {
+      --color-primary: #0f172a;
+      --color-accent: #2563eb;
+      --color-bg: #f8fafc;
+      --color-card: #ffffff;
+      --color-border: #e2e8f0;
+      --color-text: #1e293b;
+      --color-text-muted: #64748b;
+      --touch-target-min: 44px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+      padding-top: env(safe-area-inset-top);
+      padding-bottom: env(safe-area-inset-bottom);
+    }
+    /* Mobile App Header */
+    .app-header {
+      background-color: var(--color-primary);
+      color: #ffffff;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .header-title { font-size: 17px; font-weight: 700; }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: #22c55e; display: inline-block; margin-right: 6px; }
+
+    /* Offline Alert */
+    .offline-banner {
+      background: #fef08a;
+      color: #854d0e;
+      text-align: center;
+      padding: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      display: none;
+    }
+
+    /* Scrollable Content View */
+    .screen-container {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 16px;
+      padding-bottom: 80px; /* Offset for bottom nav */
+    }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    /* Mobile Cards */
+    .mobile-card {
+      background: var(--color-card);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+    .card-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+
+    /* Mobile Touch Buttons */
+    .btn-touch {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: var(--touch-target-min);
+      width: 100%;
+      background: var(--color-accent);
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+    .btn-touch:active { opacity: 0.85; }
+
+    /* Bottom Navigation Bar */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: #ffffff;
+      border-top: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding-bottom: env(safe-area-inset-bottom);
+      z-index: 100;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: var(--touch-target-min);
+      min-width: var(--touch-target-min);
+      background: none;
+      border: none;
+      color: var(--color-text-muted);
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      padding: 4px;
+    }
+    .nav-item.active { color: var(--color-accent); font-weight: 700; }
+    .nav-icon { font-size: 18px; line-height: 1; margin-bottom: 2px; }
+  </style>
+</head>
+<body>
+
+  <header class="app-header">
+    <div class="header-title">Field Workspace</div>
+    <div style="font-size: 12px;"><span class="status-dot"></span>Synced</div>
+  </header>
+
+  <div id="offline-banner" class="offline-banner">Offline Mode &bull; Changes cached locally</div>
+
+  <main class="screen-container">
+    <!-- Tab 1: Tasks -->
+    <div id="pane-tasks" class="tab-pane active">
+      <div class="mobile-card">
+        <div class="card-title">Daily Verification Checklist</div>
+        <p style="font-size: 13px; color: var(--color-text-muted);">Inspect field checkpoints before publishing release.</p>
+        <div style="margin-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+          <label style="display: flex; align-items: center; min-height: 36px; gap: 10px; font-size: 13px;">
+            <input type="checkbox" checked style="width: 18px; height: 18px;"> Verify Touch Targets (&ge;44px)
+          </label>
+          <label style="display: flex; align-items: center; min-height: 36px; gap: 10px; font-size: 13px;">
+            <input type="checkbox" checked style="width: 18px; height: 18px;"> Check Safe-Area Notch Insets
+          </label>
+          <label style="display: flex; align-items: center; min-height: 36px; gap: 10px; font-size: 13px;">
+            <input type="checkbox" style="width: 18px; height: 18px;"> Confirm Offline PWA Service Worker
+          </label>
+        </div>
+      </div>
+
+      <button type="button" class="btn-touch" onclick="alert('Verification check logged!')">Submit Inspection</button>
+    </div>
+
+    <!-- Tab 2: Activity -->
+    <div id="pane-activity" class="tab-pane">
+      <div class="mobile-card">
+        <div class="card-title">Recent Event Log</div>
+        <p style="font-size: 13px; color: var(--color-text-muted);">All mobile transactions sync directly with backend persistence.</p>
+      </div>
+    </div>
+
+    <!-- Tab 3: Account -->
+    <div id="pane-account" class="tab-pane">
+      <div class="mobile-card">
+        <div class="card-title">Local Cache Status</div>
+        <p style="font-size: 13px; color: var(--color-text-muted);">PWA Storage: Active &bull; Offline Cache: Enabled</p>
+      </div>
+    </div>
+  </main>
+
+  <nav class="bottom-nav">
+    <button type="button" id="nav-btn-tasks" class="nav-item active" data-tab="tasks">
+      <span class="nav-icon">&#9776;</span>
+      <span>Tasks</span>
+    </button>
+    <button type="button" id="nav-btn-activity" class="nav-item" data-tab="activity">
+      <span class="nav-icon">&#9881;</span>
+      <span>Activity</span>
+    </button>
+    <button type="button" id="nav-btn-account" class="nav-item" data-tab="account">
+      <span class="nav-icon">&#9882;</span>
+      <span>Device</span>
+    </button>
+  </nav>
+
+  <script>
+    // Bottom Nav Tab Switching
+    document.querySelectorAll('.nav-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.getAttribute('data-tab');
+        document.getElementById(`pane-${tab}`).classList.add('active');
+      });
+    });
+
+    // Offline status detection
+    window.addEventListener('offline', () => {
+      document.getElementById('offline-banner').style.display = 'block';
+    });
+    window.addEventListener('online', () => {
+      document.getElementById('offline-banner').style.display = 'none';
+    });
+
+    // Register Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(err => {
+        console.warn('Service Worker registration skipped:', err);
+      });
+    }
+  </script>
+</body>
+</html>

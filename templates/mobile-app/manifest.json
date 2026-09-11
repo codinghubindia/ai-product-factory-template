@@ -1,0 +1,22 @@
+{
+  "short_name": "ProductPWA",
+  "name": "AI Product Factory Mobile Application",
+  "description": "Touch-first commercial mobile web application with offline persistence.",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#ffffff",
+  "theme_color": "#0f172a",
+  "display": "standalone",
+  "orientation": "portrait"
+}

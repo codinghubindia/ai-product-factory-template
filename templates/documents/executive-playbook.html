@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{PRODUCT_TITLE}} — Executive Playbook</title>
+  <style>
+    /* ==========================================================================
+       AI PRODUCT FACTORY — EXECUTIVE PLAYBOOK TEMPLATE
+       Modality: Document / Publication Grade
+       Optimized for: Desktop Reading, Tablet, and High-Resolution PDF Print
+       ========================================================================== */
+
+    :root {
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      
+      --color-primary: #0f172a;
+      --color-primary-light: #1e293b;
+      --color-accent: #2563eb;
+      --color-accent-subtle: #eff6ff;
+      --color-accent-border: #bfdbfe;
+      
+      --color-text-main: #1e293b;
+      --color-text-muted: #64748b;
+      --color-text-light: #94a3b8;
+      --color-border: #e2e8f0;
+      --color-bg-canvas: #f8fafc;
+      --color-bg-card: #ffffff;
+      
+      --color-success-bg: #f0fdf4;
+      --color-success-border: #bbf7d0;
+      --color-success-text: #166534;
+      
+      --color-warning-bg: #fffbeb;
+      --color-warning-border: #fde68a;
+      --color-warning-text: #92400e;
+      
+      --color-danger-bg: #fef2f2;
+      --color-danger-border: #fecaca;
+      --color-danger-text: #991b1b;
+      
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Print & Pagination Optimization */
+    @page {
+      size: A4 portrait;
+      margin: 20mm 15mm 20mm 15mm;
+      @top-left {
+        content: "{{PRODUCT_TITLE}}";
+        font-family: var(--font-sans);
+        font-size: 8pt;
+        color: #64748b;
+      }
+      @bottom-right {
+        content: "Page " counter(page) " of " counter(pages);
+        font-family: var(--font-sans);
+        font-size: 8pt;
+        color: #64748b;
+      }
+    }
+
+    @page:first {
+      @top-left { content: normal; }
+      @bottom-right { content: normal; }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--color-text-main);
+      background-color: var(--color-bg-canvas);
+      line-height: 1.6;
+      font-size: 11pt;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .document-container {
+      max-width: 860px;
+      margin: 0 auto;
+      background: var(--color-bg-card);
+      padding: 48px 56px;
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Cover / Hero Header */
+    .cover-page {
+      border-bottom: 2px solid var(--color-border);
+      padding-bottom: 40px;
+      margin-bottom: 40px;
+    }
+
+    .badge-category {
+      display: inline-block;
+      font-size: 9pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-accent);
+      background: var(--color-accent-subtle);
+      border: 1px solid var(--color-accent-border);
+      padding: 4px 12px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 16px;
+    }
+
+    h1.doc-title {
+      font-size: 28pt;
+      line-height: 1.2;
+      font-weight: 800;
+      color: var(--color-primary);
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    p.doc-subtitle {
+      font-size: 13pt;
+      color: var(--color-text-muted);
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+
+    .meta-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      font-size: 9pt;
+      color: var(--color-text-muted);
+      border-top: 1px solid var(--color-border);
+      padding-top: 16px;
+    }
+
+    .meta-strip strong {
+      color: var(--color-text-main);
+    }
+
+    /* Section Headings */
+    h2 {
+      font-size: 18pt;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-top: 36px;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--color-border);
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 13pt;
+      font-weight: 600;
+      color: var(--color-primary-light);
+      margin-top: 24px;
+      margin-bottom: 10px;
+      break-after: avoid;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin-bottom: 14px;
+    }
+
+    /* Executive KPI Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .kpi-card {
+      background: var(--color-bg-canvas);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      text-align: left;
+    }
+
+    .kpi-metric {
+      font-size: 24pt;
+      font-weight: 800;
+      color: var(--color-accent);
+      line-height: 1.1;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+
+    .kpi-label {
+      font-size: 9pt;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--color-text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .kpi-desc {
+      font-size: 9.5pt;
+      color: var(--color-text-main);
+      margin-top: 6px;
+    }
+
+    /* Callout Card Components */
+    .callout {
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      margin: 22px 0;
+      border-left: 4px solid;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .callout.info {
+      background: var(--color-accent-subtle);
+      border-color: var(--color-accent);
+    }
+
+    .callout.success {
+      background: var(--color-success-bg);
+      border-color: var(--color-success-text);
+      color: var(--color-success-text);
+    }
+
+    .callout.warning {
+      background: var(--color-warning-bg);
+      border-color: var(--color-warning-text);
+      color: var(--color-warning-text);
+    }
+
+    .callout-title {
+      font-weight: 700;
+      font-size: 10.5pt;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Data Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 9.5pt;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    th {
+      background: var(--color-bg-canvas);
+      color: var(--color-primary);
+      text-align: left;
+      padding: 10px 14px;
+      font-weight: 700;
+      border-bottom: 2px solid var(--color-border);
+      border-top: 1px solid var(--color-border);
+    }
+
+    td {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--color-border);
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #fafbfc;
+    }
+
+    td.numeric, th.numeric {
+      text-align: right;
+    }
+
+    /* Checklist Framework */
+    .checklist {
+      list-style: none;
+      margin: 16px 0;
+    }
+
+    .checklist li {
+      position: relative;
+      padding-left: 28px;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .checklist li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      top: 0;
+      font-weight: 800;
+      color: var(--color-accent);
+    }
+
+    /* Implementation Roadmap */
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 16px;
+      background: var(--color-bg-canvas);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 32px;
+      height: 32px;
+      background: var(--color-accent);
+      color: #ffffff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 11pt;
+    }
+
+    .step-content h4 {
+      font-size: 11pt;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 4px;
+    }
+
+    .step-content p {
+      font-size: 9.5pt;
+      color: var(--color-text-main);
+      margin-bottom: 0;
+    }
+
+    /* Citations / Provenance Footer */
+    .provenance-box {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 2px dashed var(--color-border);
+      font-size: 8.5pt;
+      color: var(--color-text-muted);
+    }
+
+    .provenance-box ol {
+      padding-left: 18px;
+      margin-top: 8px;
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+      }
+      .document-container {
+        box-shadow: none;
+        padding: 0;
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="document-container">
+
+    <!-- Cover / Header -->
+    <header class="cover-page">
+      <span class="badge-category">{{CATEGORY_BADGE}}</span>
+      <h1 class="doc-title">{{PRODUCT_TITLE}}</h1>
+      <p class="doc-subtitle">{{PRODUCT_SUBTITLE}}</p>
+      
+      <div class="meta-strip">
+        <div><strong>Version:</strong> {{VERSION}}</div>
+        <div><strong>Target Audience:</strong> {{TARGET_AUDIENCE}}</div>
+        <div><strong>Transformation:</strong> {{TRANSFORMATION_SUMMARY}}</div>
+        <div><strong>Verified Sources:</strong> {{SOURCE_COUNT}} Tier-1/2 Records</div>
+      </div>
+    </header>
+
+    <!-- Executive Summary / Core Transformation -->
+    <section>
+      <h2>1. Executive Summary & Core Transformation</h2>
+      <p>
+        {{EXECUTIVE_SUMMARY_TEXT}}
+      </p>
+
+      <!-- KPI Metric Highlights -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-metric">{{KPI_1_VALUE}}</div>
+          <div class="kpi-label">{{KPI_1_LABEL}}</div>
+          <div class="kpi-desc">{{KPI_1_DESC}}</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-metric">{{KPI_2_VALUE}}</div>
+          <div class="kpi-label">{{KPI_2_LABEL}}</div>
+          <div class="kpi-desc">{{KPI_2_DESC}}</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-metric">{{KPI_3_VALUE}}</div>
+          <div class="kpi-label">{{KPI_3_LABEL}}</div>
+          <div class="kpi-desc">{{KPI_3_DESC}}</div>
+        </div>
+      </div>
+
+      <div class="callout info">
+        <div class="callout-title">Core Operating Principle</div>
+        <p>{{CORE_PRINCIPLE_TEXT}}</p>
+      </div>
+    </section>
+
+    <!-- Implementation Framework -->
+    <section>
+      <h2>2. Operational Methodology & Action Plan</h2>
+      <p>{{METHODOLOGY_INTRO}}</p>
+
+      <div class="step-list">
+        <div class="step-item">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>{{STEP_1_TITLE}}</h4>
+            <p>{{STEP_1_DESCRIPTION}}</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>{{STEP_2_TITLE}}</h4>
+            <p>{{STEP_2_DESCRIPTION}}</p>
+          </div>
+        </div>
+        <div class="step-item">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>{{STEP_3_TITLE}}</h4>
+            <p>{{STEP_3_DESCRIPTION}}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Data Matrix -->
+    <section>
+      <h2>3. Benchmarks & Decision Matrix</h2>
+      <p>{{MATRIX_INTRO}}</p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Evaluation Dimension</th>
+            <th>Baseline / Industry Standard</th>
+            <th>Optimized State</th>
+            <th class="numeric">Impact Delta</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>{{ROW_1_NAME}}</strong></td>
+            <td>{{ROW_1_BASELINE}}</td>
+            <td>{{ROW_1_OPTIMIZED}}</td>
+            <td class="numeric">{{ROW_1_DELTA}}</td>
+          </tr>
+          <tr>
+            <td><strong>{{ROW_2_NAME}}</strong></td>
+            <td>{{ROW_2_BASELINE}}</td>
+            <td>{{ROW_2_OPTIMIZED}}</td>
+            <td class="numeric">{{ROW_2_DELTA}}</td>
+          </tr>
+          <tr>
+            <td><strong>{{ROW_3_NAME}}</strong></td>
+            <td>{{ROW_3_BASELINE}}</td>
+            <td>{{ROW_3_OPTIMIZED}}</td>
+            <td class="numeric">{{ROW_3_DELTA}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- Execution Checklist -->
+    <section>
+      <h2>4. Verification & Hand-off Checklist</h2>
+      <ul class="checklist">
+        <li><strong>{{CHECK_1_TITLE}}:</strong> {{CHECK_1_TEXT}}</li>
+        <li><strong>{{CHECK_2_TITLE}}:</strong> {{CHECK_2_TEXT}}</li>
+        <li><strong>{{CHECK_3_TITLE}}:</strong> {{CHECK_3_TEXT}}</li>
+        <li><strong>{{CHECK_4_TITLE}}:</strong> {{CHECK_4_TEXT}}</li>
+      </ul>
+    </section>
+
+    <!-- Verified Sources & Provenance -->
+    <footer class="provenance-box">
+      <strong>Verified Evidence & Citation Ledger:</strong>
+      <ol>
+        <li>{{CITATION_1}}</li>
+        <li>{{CITATION_2}}</li>
+        <li>{{CITATION_3}}</li>
+      </ol>
+      <div style="margin-top: 12px;">Generated by AI Product Factory &bull; Governed by AGENTS.md Constitution</div>
+    </footer>
+
+  </div>
+
+</body>
+</html>

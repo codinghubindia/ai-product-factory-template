@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Creative Product Concept Schema",
+  "type": "object",
+  "required": [
+    "product_id",
+    "product_personality",
+    "emotional_direction",
+    "visual_metaphor",
+    "signature_mechanism",
+    "customer_wow",
+    "visual_world"
+  ],
+  "properties": {
+    "product_id": { "type": "string" },
+    "version": { "type": "string" },
+    "product_personality": {
+      "type": "object",
+      "required": ["archetype", "positive_tone", "negative_boundaries"],
+      "properties": {
+        "archetype": { "type": "string" },
+        "positive_tone": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "negative_boundaries": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "emotional_direction": {
+      "type": "object",
+      "required": ["arrival_emotion", "in_work_emotion", "completion_emotion"],
+      "properties": {
+        "arrival_emotion": { "type": "string" },
+        "in_work_emotion": { "type": "string" },
+        "completion_emotion": { "type": "string" }
+      }
+    },
+    "audience_identity": {
+      "type": "object",
+      "properties": {
+        "cultural_codes": { "type": "array", "items": { "type": "string" } },
+        "authentic_vernacular": { "type": "array", "items": { "type": "string" } },
+        "premium_definition": { "type": "string" }
+      }
+    },
+    "visual_metaphor": {
+      "type": "object",
+      "required": ["name", "description", "mental_model"],
+      "properties": {
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "mental_model": { "type": "string" }
+      }
+    },
+    "signature_mechanism": {
+      "type": "object",
+      "required": [
+        "name",
+        "type",
+        "purpose",
+        "how_it_works",
+        "differentiation",
+        "customer_transformation",
+        "creator_demonstration"
+      ],
+      "properties": {
+        "name": { "type": "string" },
+        "type": {
+          "type": "string",
+          "enum": [
+            "diagnostic",
+            "scoring_system",
+            "workflow",
+            "framework",
+            "transformation_ladder",
+            "decision_engine",
+            "operating_system",
+            "ritual",
+            "methodology",
+            "personalized_pathway"
+          ]
+        },
+        "purpose": { "type": "string" },
+        "how_it_works": { "type": "string" },
+        "differentiation": { "type": "string" },
+        "customer_transformation": { "type": "string" },
+        "creator_demonstration": { "type": "string" }
+      }
+    },
+    "memorable_terminology": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["generic_term", "proprietary_term", "rationale"],
+        "properties": {
+          "generic_term": { "type": "string" },
+          "proprietary_term": { "type": "string" },
+          "rationale": { "type": "string" }
+        }
+      }
+    },
+    "customer_wow": {
+      "type": "object",
+      "required": [
+        "ttfr_seconds",
+        "first_successful_action",
+        "first_visible_transformation",
+        "most_satisfying_moment",
+        "reusable_output"
+      ],
+      "properties": {
+        "ttfr_seconds": { "type": "integer" },
+        "first_successful_action": { "type": "string" },
+        "first_visible_transformation": { "type": "string" },
+        "most_satisfying_moment": { "type": "string" },
+        "reusable_output": { "type": "string" }
+      }
+    },
+    "visual_world": {
+      "type": "object",
+      "required": ["palette", "typography", "rendering_style"],
+      "properties": {
+        "palette": {
+          "type": "object",
+          "required": ["primary", "surface", "border", "accent"],
+          "properties": {
+            "primary": { "type": "string" },
+            "surface": { "type": "string" },
+            "border": { "type": "string" },
+            "accent": { "type": "string" }
+          }
+        },
+        "typography": {
+          "type": "object",
+          "required": ["display_font", "body_font"],
+          "properties": {
+            "display_font": { "type": "string" },
+            "body_font": { "type": "string" },
+            "mono_font": { "type": "string" }
+          }
+        },
+        "rendering_style": { "type": "string" },
+        "layout_archetype": { "type": "string" }
+      }
+    },
+    "creator_compatibility": {
+      "type": "object",
+      "properties": {
+        "demonstration_duration_sec": { "type": "integer" },
+        "visual_payoff": { "type": "string" },
+        "short_form_angle": { "type": "string" }
+      }
+    }
+  }
+}

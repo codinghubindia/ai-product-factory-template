@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Engineering Operating System — Implementation Workbook & Planner</title>
+  <style>
+    /* ==========================================================================
+       AI PRODUCT FACTORY — COMMERCIAL WORKBOOK & PLANNER SYSTEM
+       Standard: 8mm Handwriting Lines, Dual-Mode Digital/Print, Checkboxes, Trackers
+       ========================================================================== */
+
+    :root {
+      --font-display: 'Merriweather', 'Georgia', serif;
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+      --color-primary: #0f172a;       /* Slate 900 */
+      --color-accent: #0284c7;        /* Sky 600 */
+      --color-accent-subtle: #f0f9ff; /* Sky 50 */
+      --color-text-main: #1e293b;
+      --color-text-muted: #64748b;
+      --color-border: #e2e8f0;
+      --color-rule: #cbd5e1;          /* 8mm writing line contrast */
+      --color-bg-page: #ffffff;
+      --color-bg-canvas: #f8fafc;
+
+      --rule-height: 28pt; /* Approx 9.8mm physical line height */
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 20mm 18mm 20mm 22mm; /* Inside gutter 22mm */
+      @top-left {
+        content: "ENGINEERING OPERATING SYSTEM &bull; WORKBOOK";
+        font-family: var(--font-body);
+        font-size: 7.5pt;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #94a3b8;
+      }
+      @bottom-right {
+        content: "Page " counter(page) " of " counter(pages);
+        font-family: var(--font-body);
+        font-size: 8pt;
+        font-weight: 600;
+        color: #475569;
+      }
+    }
+
+    @page:first {
+      margin: 0;
+      @top-left { content: normal; }
+      @bottom-right { content: normal; }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-body);
+      color: var(--color-text-main);
+      background-color: var(--color-bg-canvas);
+      line-height: 1.5;
+      font-size: 10pt;
+      -webkit-font-smoothing: antialiased;
+      padding: 40px 20px;
+    }
+
+    .workbook-container {
+      max-width: 860px;
+      margin: 0 auto;
+      background: var(--color-bg-page);
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+      border: 1px solid var(--color-border);
+    }
+
+    .page-section {
+      padding: 56px 60px;
+      page-break-after: always;
+      break-after: page;
+      position: relative;
+    }
+
+    /* Cover Spread */
+    .workbook-cover {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 40%, #0c4a6e 100%);
+      color: #ffffff;
+      min-height: 1080px;
+      padding: 72px 60px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      break-after: page;
+    }
+    .cover-tag {
+      display: inline-block;
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      color: #ffffff;
+      font-size: 8.5pt;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 4px;
+    }
+    .cover-title {
+      font-family: var(--font-display);
+      font-size: 34pt;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-top: 100px;
+      margin-bottom: 16px;
+    }
+    .cover-subtitle {
+      font-size: 14pt;
+      color: #e0f2fe;
+      max-width: 580px;
+      line-height: 1.5;
+    }
+    .nameplate-card {
+      background: #ffffff;
+      color: var(--color-primary);
+      padding: 24px 32px;
+      border-radius: 8px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+      margin-top: 80px;
+    }
+    .nameplate-field {
+      margin-bottom: 16px;
+    }
+    .nameplate-label {
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--color-text-muted);
+      margin-bottom: 6px;
+    }
+
+    /* Form & Handwriting Ergonomics */
+    .handwriting-line {
+      width: 100%;
+      height: var(--rule-height);
+      border-bottom: 1.5px solid var(--color-rule);
+      display: flex;
+      align-items: flex-end;
+      font-family: inherit;
+      font-size: 11pt;
+      color: var(--color-primary);
+    }
+    .handwriting-input {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: transparent;
+      outline: none;
+      font-family: inherit;
+      font-size: 11pt;
+      color: var(--color-primary);
+      padding-bottom: 4px;
+    }
+    .fillable-textarea {
+      width: 100%;
+      min-height: 140px;
+      border: 1.5px solid var(--color-rule);
+      border-radius: 6px;
+      background: #fafbfc;
+      padding: 14px;
+      font-family: inherit;
+      font-size: 10.5pt;
+      line-height: 1.6;
+      color: var(--color-primary);
+      resize: vertical;
+      outline: none;
+    }
+    .fillable-textarea:focus {
+      background: #ffffff;
+      border-color: var(--color-accent);
+    }
+
+    /* Checkboxes */
+    .checkbox-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+      font-size: 10pt;
+    }
+    .custom-checkbox {
+      width: 18px;
+      height: 18px;
+      border: 1.75px solid #475569;
+      border-radius: 4px;
+      flex-shrink: 0;
+      margin-top: 2px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Worksheet Layout */
+    .exercise-header {
+      border-bottom: 2px solid var(--color-primary);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .exercise-badge {
+      font-size: 8pt;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--color-accent);
+      margin-bottom: 4px;
+    }
+    .exercise-title {
+      font-family: var(--font-display);
+      font-size: 20pt;
+      font-weight: 800;
+      color: var(--color-primary);
+    }
+    .exercise-meta {
+      font-size: 8.5pt;
+      font-weight: 600;
+      color: var(--color-text-muted);
+      text-align: right;
+    }
+
+    .framework-card {
+      background: var(--color-accent-subtle);
+      border: 1px solid #bae6fd;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 28px;
+      font-size: 9.5pt;
+    }
+    .prompt-block {
+      margin-bottom: 28px;
+    }
+    .prompt-label {
+      font-weight: 700;
+      font-size: 10.5pt;
+      color: var(--color-primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .prompt-number {
+      background: var(--color-primary);
+      color: #ffffff;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8.5pt;
+      font-weight: 800;
+    }
+
+    /* Weekly Habit & Progress Tracker */
+    .tracker-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+    .tracker-table th, .tracker-table td {
+      border: 1px solid var(--color-border);
+      padding: 10px 8px;
+      text-align: center;
+    }
+    .tracker-table th {
+      background: #f1f5f9;
+      font-size: 8pt;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .habit-cell {
+      text-align: left !important;
+      font-weight: 600;
+      padding-left: 12px !important;
+    }
+    .bubble-check {
+      width: 20px;
+      height: 20px;
+      border: 1.5px solid #94a3b8;
+      border-radius: 50%;
+      display: inline-block;
+      cursor: pointer;
+    }
+
+    /* Sign-off Footer */
+    .signoff-card {
+      border-top: 1.5px solid var(--color-border);
+      padding-top: 20px;
+      margin-top: 40px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 9pt;
+      color: var(--color-text-muted);
+    }
+
+    @media print {
+      body { background: #ffffff; padding: 0; }
+      .workbook-container { box-shadow: none; border: none; max-width: 100%; }
+      .page-section { padding: 0; margin-bottom: 0; }
+      .fillable-textarea { border: 1.5px solid #cbd5e1; background: #ffffff; }
+    }
+  </style>
+</head>
+<body>
+  <div class="workbook-container">
+
+    <!-- COVER & NAMEPLATE -->
+    <div class="workbook-cover">
+      <div>
+        <span class="cover-tag">Official Implementation Workbook</span>
+      </div>
+      <div>
+        <h1 class="cover-title">Engineering Operating System</h1>
+        <p class="cover-subtitle">A Guided 90-Day Tactical Workbook for Technical Leaders, Architects, and Engineering Managers</p>
+      </div>
+      <div class="nameplate-card">
+        <div class="nameplate-field">
+          <div class="nameplate-label">This Workbook Belongs To:</div>
+          <div class="handwriting-line">
+            <input type="text" class="handwriting-input" placeholder="Enter Full Name...">
+          </div>
+        </div>
+        <div class="nameplate-field">
+          <div class="nameplate-label">Target Transformation &amp; 90-Day Goal:</div>
+          <div class="handwriting-line">
+            <input type="text" class="handwriting-input" placeholder="e.g. Cut PR review cycle time from 72h to 6h across 4 squad teams...">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEEKLY OPERATIONAL TRACKER SPREAD -->
+    <div class="page-section">
+      <div class="exercise-header">
+        <div>
+          <div class="exercise-badge">Module 01 &bull; Weekly Rhythm</div>
+          <div class="exercise-title">Execution Cadence &amp; Habit Tracker</div>
+        </div>
+        <div class="exercise-meta">
+          Week Number: _____<br>
+          Target Cycle: Sprint 24
+        </div>
+      </div>
+
+      <div class="framework-card">
+        <strong>The Cadence Rule:</strong> System reliability is built through consistent, uncompromised daily micro-habits rather than frantic end-of-sprint remediation sprints.
+      </div>
+
+      <table class="tracker-table">
+        <thead>
+          <tr>
+            <th style="width: 45%;">Core Cadence Habit</th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+            <th>Sun</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="habit-cell">Morning PR Queue Triage (< 30 min)</td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><strong>/7</strong></td>
+          </tr>
+          <tr>
+            <td class="habit-cell">Zero-Slack Deep Work Block (3.5 hours)</td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><strong>/7</strong></td>
+          </tr>
+          <tr>
+            <td class="habit-cell">CI/CD Pipeline Failure Blocker Resolution</td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><strong>/7</strong></td>
+          </tr>
+          <tr>
+            <td class="habit-cell">Architecture Decision Record (ADR) Logged</td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><span class="bubble-check"></span></td>
+            <td><strong>/7</strong></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="prompt-block" style="margin-top: 36px;">
+        <div class="prompt-label">
+          <span class="prompt-number">1</span>
+          Primary Architectural Priority for this Week:
+        </div>
+        <div class="handwriting-line"><input type="text" class="handwriting-input"></div>
+        <div class="handwriting-line"><input type="text" class="handwriting-input"></div>
+      </div>
+
+      <div class="prompt-block">
+        <div class="prompt-label">
+          <span class="prompt-number">2</span>
+          Weekly Friction Log &amp; Unplanned Interruptions:
+        </div>
+        <textarea class="fillable-textarea" placeholder="Log bottlenecks encountered this week and their source systems..."></textarea>
+      </div>
+
+      <div class="signoff-card">
+        <div>Sprint Cadence Review: &bull; In Progress &bull;</div>
+        <div>Verified by Tech Lead: ______________________ Date: ________</div>
+      </div>
+    </div>
+
+    <!-- GUIDED WORKSHEET SPREAD -->
+    <div class="page-section">
+      <div class="exercise-header">
+        <div>
+          <div class="exercise-badge">Exercise 03 &bull; Deep Diagnostics</div>
+          <div class="exercise-title">Friction Point Root-Cause Mapping</div>
+        </div>
+        <div class="exercise-meta">
+          Time: 20–25 mins<br>
+          Format: Individual + Lead Review
+        </div>
+      </div>
+
+      <div class="framework-card">
+        <strong>The 5-Whys Friction Diagnostic:</strong> Never accept "the build was slow" as a root cause. Drill down until you uncover the structural interface or resource constraint.
+      </div>
+
+      <div class="prompt-block">
+        <div class="prompt-label">
+          <span class="prompt-number">1</span>
+          Identify the Single Most Expensive Engineering Bottleneck this Month:
+        </div>
+        <div class="handwriting-line"><input type="text" class="handwriting-input"></div>
+      </div>
+
+      <div class="prompt-block">
+        <div class="prompt-label">
+          <span class="prompt-number">2</span>
+          5-Whys Diagnostic Breakdown (8mm Ergonomic Ruled Lines):
+        </div>
+        <div style="margin-left: 8px;">
+          <div style="font-size: 8.5pt; color: #64748b; margin-top: 8px;">Why 1 (Immediate Cause):</div>
+          <div class="handwriting-line"><input type="text" class="handwriting-input"></div>
+          <div style="font-size: 8.5pt; color: #64748b; margin-top: 8px;">Why 2 (Contributing Factor):</div>
+          <div class="handwriting-line"><input type="text" class="handwriting-input"></div>
+          <div style="font-size: 8.5pt; color: #64748b; margin-top: 8px;">Why 3 (Process / Tooling Defect):</div>
+          <div class="handwriting-line"><input type="text" class="handwriting-input"></div>
+          <div style="font-size: 8.5pt; color: #64748b; margin-top: 8px;">Why 4 (Structural / Team Constraint):</div>
+          <div class="handwriting-line"><input type="text" class="handwriting-input"></div>
+          <div style="font-size: 8.5pt; color: #64748b; margin-top: 8px;">Why 5 (Underlying Cultural or Strategic Assumption):</div>
+          <div class="handwriting-line"><input type="text" class="handwriting-input"></div>
+        </div>
+      </div>
+
+      <div class="prompt-block" style="margin-top: 32px;">
+        <div class="prompt-label">
+          <span class="prompt-number">3</span>
+          Action Commitment &amp; Prevention SLA:
+        </div>
+        <div class="checkbox-item">
+          <div class="custom-checkbox">&check;</div>
+          <div>New automated validation test or lint rule committed to repository main branch.</div>
+        </div>
+        <div class="checkbox-item">
+          <div class="custom-checkbox"></div>
+          <div>Architecture Decision Record published and shared during team standup.</div>
+        </div>
+        <div class="checkbox-item">
+          <div class="custom-checkbox"></div>
+          <div>Deployment pipeline SLA benchmarked and monitoring alert configured.</div>
+        </div>
+      </div>
+
+      <div class="signoff-card">
+        <div>Exercise Status: [ ] Complete [ ] Blocked</div>
+        <div>Owner Signature: _______________________ Date: ________</div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

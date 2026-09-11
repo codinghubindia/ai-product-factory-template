@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "product_id": "{{PRODUCT_ID}}",
+  "product_name": "{{PRODUCT_NAME}}",
+  "version": "{{VERSION}}",
+  "delivery_timestamp": "{{DELIVERY_TIMESTAMP}}",
+  "production_readiness": "PRODUCTION_READY",
+  "deliverables": [
+    {
+      "id": "DELIV-001",
+      "name": "{{PRIMARY_DELIVERABLE_NAME}}",
+      "type": "file",
+      "delivery_format": ".pdf",
+      "location_or_url": "deliverables/{{PRIMARY_DELIVERABLE_FILE}}",
+      "file_size_bytes": 0,
+      "checksum_sha256": "{{SHA256_CHECKSUM}}",
+      "description": "{{PRIMARY_DELIVERABLE_DESCRIPTION}}"
+    },
+    {
+      "id": "DELIV-002",
+      "name": "Implementation Companion Spreadsheet",
+      "type": "file",
+      "delivery_format": ".xlsx",
+      "location_or_url": "deliverables/{{SPREADSHEET_FILE}}",
+      "file_size_bytes": 0,
+      "checksum_sha256": "{{SHA256_CHECKSUM}}",
+      "description": "Calculations and operational planning tracker"
+    }
+  ],
+  "customer_access": {
+    "access_type": "direct_download",
+    "instructions": "Unzip the package archive and follow README.md instructions.",
+    "support_channel": "support@productstudio.io"
+  },
+  "installation_guide": {
+    "prerequisites": [
+      "Modern Web Browser (Chrome, Firefox, Safari, Edge)",
+      "Microsoft Excel 2016+ or compatible spreadsheet software (Google Sheets, LibreOffice Calc)"
+    ],
+    "steps": [
+      "Download and extract the ZIP archive to your local machine.",
+      "Open README.md for quick-start orientation.",
+      "Review the executive playbook PDF in deliverables/",
+      "Populate your team assumptions into the companion spreadsheet model."
+    ],
+    "troubleshooting": "If fonts do not display correctly in PDF, ensure your PDF reader has system font rendering enabled."
+  },
+  "license": {
+    "type": "Commercial Single-User / Enterprise Internal Use",
+    "terms_summary": "Authorized for internal operational use within purchasing organization. Redistribution or resale prohibited."
+  }
+}

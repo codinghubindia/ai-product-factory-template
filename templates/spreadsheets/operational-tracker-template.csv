@@ -1,0 +1,10 @@
+# AI PRODUCT FACTORY — OPERATIONAL WORKFLOW TRACKER TEMPLATE
+# Modality: Spreadsheet / Workflow Tracker / Benchmark Dataset
+# Encoding: UTF-8 | Format: Typed CSV
+task_id,task_name,category,priority,status,estimated_hours,actual_hours,variance,owner,due_date,verified_evidence_ref
+TSK-001,Architecture Topology Review,Engineering,HIGH,DONE,8,7,-1,Lead Architect,2026-09-15,SRC-012
+TSK-002,Database Schema & Migrations,Persistence,CRITICAL,DONE,12,12,0,Data Engineer,2026-09-16,SRC-015
+TSK-003,API Endpoint Contract Tests,API,HIGH,DONE,10,11,+1,QA Lead,2026-09-17,SRC-021
+TSK-004,Responsive UI Breakpoints (375px/768px),Design/Frontend,HIGH,IN_PROGRESS,14,8,-6,UI Director,2026-09-18,SRC-028
+TSK-005,Broken Link & Navigation Sweep,Quality Assurance,CRITICAL,PENDING,6,0,-6,QA Engineer,2026-09-19,SRC-033
+TSK-006,Red Team Critic Adversarial Audit,Red Team,CRITICAL,PENDING,8,0,-8,Critic Subagent,2026-09-20,SRC-042
